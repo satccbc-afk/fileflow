@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
             allow: '/',
             disallow: ['/admin/', '/api/', '/dashboard/'],
         },
-        sitemap: 'https://fileflow.io/sitemap.xml',
+        sitemap: 'https://fileflow-one.vercel.app/sitemap.xml',
     }
 }

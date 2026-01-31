@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://fileflow.io' // User should update this with their actual domain
+    const baseUrl = 'https://fileflow-one.vercel.app'
 
     return [
         {
