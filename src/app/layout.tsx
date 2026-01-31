@@ -19,7 +19,7 @@ const inter = Inter({
 });
 
 export const metadata = {
-  metadataBase: new URL('https://fileflow.io'),
+  metadataBase: new URL('https://fileflow-one.vercel.app'),
   alternates: {
     canonical: '/',
   },
