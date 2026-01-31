@@ -67,6 +67,9 @@ export const metadata = {
     shortcut: '/favicon.ico',
     apple: '/apple-touch-icon.png',
   },
+  verification: {
+    google: 'RWeHzgX7mrKgOAemL97yZrSJuacj4_DYTFt-a-qp594',
+  },
 };
 
 export const viewport = {
