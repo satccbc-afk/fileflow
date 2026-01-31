@@ -1,0 +1,318 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui;
+  --font-heading: var(--font-outfit), ui-sans-serif, system-ui;
+
+  /* MINIMAL AESTHETIC COLORS */
+  --color-share: #0A0A0A;
+  --color-secure: #2E2E2E;
+  --color-seamless: #6B6B6B;
+
+  --color-primary: #2E2E2E;
+  --color-primary-foreground: #FFFFFF;
+}
+
+:root {
+  --background: #FAFAFA;
+  --foreground: #0A0A0A;
+  --base-bg: #FAFAFA;
+  --surface: #FFFFFF;
+
+  /* Minimal palette */
+  --text-primary: #0A0A0A;
+  --text-secondary: #6B6B6B;
+  --charcoal: #2E2E2E;
+  --light-gray: #E8E8E8;
+  --border: #E0E0E0;
+
+  /* Red accent - refined and minimal */
+  --red-accent: #DC2626;
+  --red-soft: #FEF2F2;
+
+  --aura-color: rgba(0, 0, 0, 0.03);
+  --silk-glow: rgba(0, 0, 0, 0.01);
+}
+
+@layer base {
+  body {
+    background: linear-gradient(135deg, #FAFAFA 0%, #FEF2F2 50%, #FFFFFF 100%);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    font-family: var(--font-inter);
+    margin: 0;
+    position: relative;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* Subtle grain texture (optional, very minimal) */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.015;
+    pointer-events: none;
+    z-index: 9999;
+  }
+}
+
+/* 
+ * ATMOSPHERIC SILK BACKGROUND 
+ * Replaces the simple video with a rich, multi-layered mesh system.
+ */
+.atmospheric-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  background: var(--base-bg);
+  overflow: hidden;
+}
+
+.silk-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.4;
+  pointer-events: none;
+  animation: orb-float 20s infinite ease-in-out;
+}
+
+.orb-1 {
+  width: 60vw;
+  height: 60vw;
+  background: radial-gradient(circle, var(--silk-glow) 0%, transparent 70%);
+  top: -10%;
+  right: -10%;
+  animation-delay: 0s;
+}
+
+.orb-2 {
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.02) 0%, transparent 70%);
+  bottom: -10%;
+  left: -10%;
+  animation-delay: -5s;
+}
+
+.orb-3 {
+  width: 40vw;
+  height: 40vw;
+  background: radial-gradient(circle, var(--aura-color) 0%, transparent 70%);
+  top: 40%;
+  left: 20%;
+  animation-delay: -10s;
+}
+
+@keyframes orb-float {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  33% {
+    transform: translate(10%, 15%) scale(1.1);
+  }
+
+  66% {
+    transform: translate(-5%, 10%) scale(0.9);
+  }
+}
+
+/* CURSOR-REACTIVE AURA */
+.aura-bg {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--aura-color) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: -5;
+}
+
+@keyframes glass-shimmer {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+
+  100% {
+    transform: translateX(200%) skewX(-15deg);
+  }
+}
+
+.shimmer-trigger:hover .shimmer-layer {
+  animation: glass-shimmer 1.5s infinite;
+}
+
+.magnetic-btn {
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.magnetic-btn:active {
+  transform: scale(0.96);
+}
+
+/* PREMIUM SPOTLIGHT CARDS */
+.bento-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.04),
+    0 8px 16px rgba(0, 0, 0, 0.04);
+  /* Needed for spotlight absolute positioning */
+  z-index: 1;
+}
+
+/* The Spotlight Glow */
+.bento-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  padding: 2px;
+  /* Thicker border glow */
+  background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y),
+      var(--red-accent),
+      transparent 50%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: -1;
+  /* Behind content */
+}
+
+/* Inner Glow */
+.bento-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y),
+      rgba(220, 38, 38, 0.1),
+      /* Stronger inner glow */
+      transparent 40%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.bento-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.08),
+    0 4px 8px rgba(0, 0, 0, 0.04);
+}
+
+.bento-card:hover::before,
+.bento-card:hover::after {
+  opacity: 1;
+}
+
+/* CLEAN UPLOADER */
+.monolith {
+  background: var(--surface);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 2rem;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.08);
+  /* More depth */
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.monolith:hover {
+  border-color: var(--charcoal);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+/* TYPOGRAPHY & UTILS */
+.text-share {
+  color: var(--text-primary);
+}
+
+.text-secure {
+  color: var(--red-accent);
+}
+
+.text-seamless {
+  color: var(--text-secondary);
+}
+
+.text-holographic {
+  color: var(--charcoal);
+  font-weight: 700;
+}
+
+.font-heading {
+  font-family: var(--font-outfit);
+}
+
+.pill {
+  background: var(--surface);
+  backdrop-filter: blur(10px);
+  padding: 0.6rem 1.4rem;
+  border-radius: 99rem;
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+@keyframes float-spatial {
+
+  0%,
+  100% {
+    transform: translateY(0) rotateX(0) rotateY(0);
+  }
+
+  50% {
+    transform: translateY(-15px) rotateX(1deg) rotateY(1deg);
+  }
+}
+
+.animate-spatial {
+  animation: float-spatial 8s ease-in-out infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-secure);
+}

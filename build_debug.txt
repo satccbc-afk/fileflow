@@ -1,0 +1,192 @@
+﻿Γû▓ Next.js 16.1.6 (Turbopack)
+
+  Creating an optimized production build ...
+node.exe : Error: 
+Cannot apply unknown 
+utility class 
+`border-border`
+At line:1 char:1
++ & "C:\Program Files
+\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (Error:    
+ Cannot a...`bord    
+er-border`:Strin    
+g) [], RemoteExc    
+eption
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+    [2m[at 
+onInvalidCandidate (C
+:\Users\sunny\.gemini
+\antigravity\scratch\
+Fileflow\node_modules
+\tailwindcss\dist\lib
+.js:21:1511)][0m
+    [2m[at Te (C:\Us
+ers\sunny\.gemini\ant
+igravity\scratch\File
+flow\node_modules\tai
+lwindcss\dist\lib.js:
+16:36652)][0m
+    [2m[at C:\Users\
+sunny\.gemini\antigra
+vity\scratch\Fileflow
+\node_modules\tailwin
+dcss\dist\lib.js:21:3
+55][0m
+    [2m[at Rr (C:\Us
+ers\sunny\.gemini\ant
+igravity\scratch\File
+flow\node_modules\tai
+lwindcss\dist\lib.js:
+3:1718)][0m
+    [2m[at _ (C:\Use
+rs\sunny\.gemini\anti
+gravity\scratch\Filef
+low\node_modules\tail
+windcss\dist\lib.js:3
+:1377)][0m
+    [2m[at $e (C:\Us
+ers\sunny\.gemini\ant
+igravity\scratch\File
+flow\node_modules\tai
+lwindcss\dist\lib.js:
+21:172)][0m
+    [2m[at un (C:\Us
+ers\sunny\.gemini\ant
+igravity\scratch\File
+flow\node_modules\tai
+lwindcss\dist\lib.js:
+38:294)][0m
+    [2m[at async cn 
+(C:\Users\sunny\.gemi
+ni\antigravity\scratc
+h\Fileflow\node_modul
+es\tailwindcss\dist\l
+ib.js:38:631)][0m
+    [2m[at async Xr 
+(C:\Users\sunny\.gemi
+ni\antigravity\scratc
+h\Fileflow\node_modul
+es\@tailwindcss\node\
+dist\index.js:10:3417
+)][0m
+    [2m[at async I (
+C:\Users\sunny\.gemin
+i\antigravity\scratch
+\Fileflow\node_module
+s\@tailwindcss\postcs
+s\dist\index.js:10:39
+77)][0m
+
+> Build error 
+occurred
+Error: Turbopack 
+build failed with 1 
+errors:
+./src/app/globals.css
+Error evaluating 
+Node.js code
+CssSyntaxError: 
+tailwindcss: C:\Users
+\sunny\.gemini\antigr
+avity\scratch\Fileflo
+w\src\app\globals.css
+:1:1: Cannot apply 
+unknown utility 
+class `border-border`
+    at Input.error (n
+ode_modules/postcss/l
+ib/input.js:135:16) [
+C:\Users\sunny\.gemin
+i\antigravity\scratch
+\Fileflow\.next\build
+\chunks\node_modules_
+fe693df6._.js:4651:22
+]
+    at Root.error (no
+de_modules/postcss/li
+b/node.js:146:32) [C:
+\Users\sunny\.gemini\
+antigravity\scratch\F
+ileflow\.next\build\c
+hunks\node_modules_fe
+693df6._.js:928:38]
+    [at Object.Once (
+C:\Users\sunny\.gemin
+i\antigravity\scratch
+\Fileflow\node_module
+s\@tailwindcss\postcs
+s\dist\index.js:10:69
+11)]
+    at async 
+LazyResult.runAsync (
+node_modules/postcss/
+lib/lazy-result.js:29
+3:11) [C:\Users\sunny
+\.gemini\antigravity\
+scratch\Fileflow\.nex
+t\build\chunks\node_m
+odules_fe693df6._.js:
+6206:21]
+    at async 
+transform (turbopack:
+///[turbopack-node]/t
+ransforms/postcss.ts:
+70:34) [C:\Users\sunn
+y\.gemini\antigravity
+\scratch\Fileflow\.ne
+xt\build\chunks\[root
+-of-the-server]__5122
+5daf._.js:146:36]
+    at async run (tur
+bopack:///[turbopack-
+node]/ipc/evaluate.ts
+:92:23) [C:\Users\sun
+ny\.gemini\antigravit
+y\scratch\Fileflow\.n
+ext\build\chunks\[roo
+t-of-the-server]__974
+941ed._.js:443:31]
+
+Import trace:
+  Client Component 
+Browser:
+    ./src/app/globals
+.css [Client 
+Component Browser]
+    
+./src/app/layout.tsx 
+[Server Component]
+
+
+    at async 
+transform (turbopack:
+///[turbopack-node]/t
+ransforms/postcss.ts:
+70:34) [C:\Users\sunn
+y\.gemini\antigravity
+\scratch\Fileflow\.ne
+xt\build\chunks\[root
+-of-the-server]__5122
+5daf._.js:146:36])
+    at async run (tur
+bopack:///[turbopack-
+node]/ipc/evaluate.ts
+:92:23) [C:\Users\sun
+ny\.gemini\antigravit
+y\scratch\Fileflow\.n
+ext\build\chunks\[roo
+t-of-the-server]__974
+941ed._.js:443:31])

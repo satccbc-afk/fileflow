@@ -1,0 +1,38 @@
+import { NextResponse } from "next/server";
+import dbConnect from "@/lib/mongodb";
+import { Transfer } from "@/models/Transfer";
+import { auth } from "@/auth";
+
+export async function POST(req: Request) {
+    try {
+        await dbConnect();
+        const session = await auth(); // Get Session
+        const { files, transferId } = await req.json();
+
+        const expiresAt = new Date();
+        expiresAt.setHours(expiresAt.getHours() + 24);
+
+        const transfer = await Transfer.create({
+            transferId,
+            files,
+            expiresAt,
+            ownerEmail: session?.user?.email || null, // Save Owner
+        });
+
+        if (session?.user?.email) {
+            const totalSize = files.reduce((acc: number, f: any) => acc + f.size, 0);
+            const { User } = require("@/models/User"); // Dynamic import to avoid circular dependency issues if any
+            await User.findOneAndUpdate(
+                { email: session.user.email },
+                { $inc: { storageUsed: totalSize } }
+            );
+        }
+
+        return NextResponse.json({ success: true, transfer });
+    } catch (error) {
+        console.error("Upload API Error:", error);
+
+        const message = error instanceof Error ? error.message : "Internal Transfer Fault";
+        return NextResponse.json({ success: false, error: message }, { status: 500 });
+    }
+}
