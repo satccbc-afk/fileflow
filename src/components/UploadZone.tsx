@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { Upload, File, X, CheckCircle2, ShieldCheck, Sparkles, BrainCircuit, Zap, ArrowUp, Globe, Shield, Activity, Copy, RefreshCw, Lock, Package, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { generateKey, exportKey, encryptFile, arrayBufferToBase64 } from "@/lib/crypto";
+import { useUploadThing } from "@/lib/uploadthing-hooks";
 
 type UploadStatus = "idle" | "scanning" | "uploading" | "success";
 
@@ -31,17 +32,49 @@ export function UploadZone() {
         noClick: files.length > 0 // We handle clicks manually when files exist
     });
 
-    const formatSize = (bytes: number) => {
-        if (bytes === 0) return "0 Bytes";
-        const k = 1024;
-        const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-    };
+    const { startUpload, isUploading } = useUploadThing("fileUploader", {
+        onClientUploadComplete: async (res) => {
+            if (!res) return;
 
-    const removeFile = (fileToRemove: File) => {
-        setFiles(files.filter(f => f !== fileToRemove));
-    };
+            setStatus("success");
+            const tid = "v-" + Math.random().toString(36).substring(7);
+
+            // Register transfer in DB
+            try {
+                const uploadedFilesData = res.map(f => ({
+                    name: f.name,
+                    size: f.size,
+                    type: f.type,
+                    key: f.key, // UploadThing key
+                    url: f.url,
+                }));
+
+                await fetch("/api/upload", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        transferId: tid,
+                        files: uploadedFilesData,
+                        password: (document.getElementById('transfer-password') as HTMLInputElement)?.value,
+                        expiresIn: (document.getElementById('transfer-expiry') as HTMLSelectElement)?.value || "1"
+                    })
+                });
+
+                const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
+                setShareLink(`${baseUrl}/vault/${tid}`);
+            } catch (e) {
+                console.error("Failed to register transfer", e);
+                setErrorMessage("Transfer registered failed");
+            }
+        },
+        onUploadError: (error: Error) => {
+            setStatus("idle");
+            setErrorMessage(error.message);
+        },
+        onUploadProgress: (p) => {
+            setProgress(p);
+        }
+    });
 
     const handleUpload = async () => {
         if (files.length === 0) return;
@@ -51,102 +84,13 @@ export function UploadZone() {
             return;
         }
 
-        setScanLines([]);
         setErrorMessage("");
+        setStatus("uploading");
 
         try {
-            setStatus("scanning");
-            setScanLines(["Analyzing file structure...", "Optimizing encryption..."]);
-
-            // 1. Authorize & Get Presigned URLs
-            const authRes = await fetch("/api/upload/authorize", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    files: files.map(f => ({ name: f.name, type: f.type, size: f.size }))
-                })
-            });
-
-            const authData = await authRes.json();
-            if (!authData.success) {
-                if (authData.error?.includes("Quota")) {
-                    setScanLines(prev => [...prev, "CRITICAL: Storage Limit Exceeded"]);
-                }
-                throw new Error(authData.error);
-            }
-
-            setScanLines(prev => [...prev, "Uplink established.", "Beginning S3 payload transfer..."]);
-            await new Promise(r => setTimeout(r, 800)); // Cinematic pause
-
-            setStatus("uploading");
-
-            setScanLines(prev => [...prev, "Generating 256-bit AES-GCM Neural Key...", "Encrypting payload in real-time..."]);
-
-            // 0. Generate Encryption Key
-            const key = await generateKey();
-            const exportedKey = await exportKey(key);
-
-            // 2. Encrypt & Upload to S3
-            const uploadedFilesData = [];
-            let completedBytes = 0;
-            // Note: We use original size for progress tracking, but encrypted size will be slightly larger (+tag)
-            const totalBytes = files.reduce((acc, f) => acc + f.size, 0);
-
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-
-                // Encrypt
-                // In a real app, use streams for large files to avoid memory crash. 
-                // For this demo, we assume memory is sufficient for <500MB
-                const { encryptedBlob, iv } = await encryptFile(file, key);
-                const ivString = arrayBufferToBase64(iv.buffer);
-
-                const presigned = authData.files[i];
-
-                await fetch(presigned.url, {
-                    method: "PUT",
-                    body: encryptedBlob,
-                    headers: { "Content-Type": "application/octet-stream" } // Generic type for encrypted blob
-                });
-
-                uploadedFilesData.push({
-                    name: presigned.name,
-                    size: file.size, // Store original size for UI
-                    type: file.type, // Store original type
-                    key: presigned.key,
-                    bucket: presigned.bucket,
-                    iv: ivString // Store IV for decryption
-                });
-
-                completedBytes += file.size;
-                setProgress(Math.round((completedBytes / totalBytes) * 100));
-            }
-
-            // 3. Register Transfer
-            const tid = "v-" + Math.random().toString(36).substring(7);
-            const regRes = await fetch("/api/upload", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    transferId: tid,
-                    files: uploadedFilesData,
-                    password: (document.getElementById('transfer-password') as HTMLInputElement)?.value,
-                    expiresIn: (document.getElementById('transfer-expiry') as HTMLSelectElement)?.value || "1"
-                })
-            });
-
-            const regJson = await regRes.json();
-            if (!regJson.success) throw new Error(regJson.error);
-
-            setStatus("success");
-            const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000'; // Fallback
-            // Append Key to URL Fragment
-            setShareLink(`${baseUrl}/vault/${tid}#key=${exportedKey}`);
-
-        } catch (err: any) {
-            console.error("Upload error:", err);
-            setStatus("idle");
-            setErrorMessage(err.message || "Upload Failed");
+            await startUpload(files);
+        } catch (e) {
+            console.error("Upload failed", e);
         }
     };
 
@@ -155,7 +99,6 @@ export function UploadZone() {
         setStatus("idle");
         setProgress(0);
         setShareLink("");
-        setScanLines([]);
         setErrorMessage("");
     };
 
