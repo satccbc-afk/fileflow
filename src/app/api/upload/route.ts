@@ -3,7 +3,8 @@ import dbConnect from "@/lib/mongodb";
 import { Transfer } from "@/models/Transfer";
 import { auth } from "@/auth";
 
-export const runtime = 'nodejs'; // Force Node.js runtime to support crypto and mongoose
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
     try {
