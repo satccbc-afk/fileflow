@@ -88,7 +88,7 @@ export function UploadZone() {
                 // In a real app, use streams for large files to avoid memory crash. 
                 // For this demo, we assume memory is sufficient for <500MB
                 const { encryptedBlob, iv } = await encryptFile(file, key);
-                const ivString = arrayBufferToBase64(iv.buffer as ArrayBuffer);
+                const ivString = arrayBufferToBase64(iv.buffer);
 
                 const presigned = authData.files[i];
 
