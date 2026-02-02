@@ -397,7 +397,13 @@ export function UploadZone() {
                         <div className="p-12 space-y-8">
                             <div className="bg-black/[0.02] border-2 border-black/5 p-8 rounded-[2.5rem] relative group">
                                 <div className="text-[10px] font-black text-black/20 uppercase tracking-widest mb-4">Secure Link</div>
-                                <div className="text-lg font-bold text-black mb-8 font-mono tracking-tight break-all">{shareLink || "Generating Secure Link..."}</div>
+                                <input
+                                    readOnly
+                                    value={shareLink}
+                                    placeholder="Generating Secure Link..."
+                                    className="w-full bg-transparent text-lg font-bold text-[#000000] font-sans tracking-tight mb-8 focus:outline-none placeholder:text-black/30 truncate"
+                                    onClick={(e) => e.currentTarget.select()}
+                                />
                                 <button
                                     onClick={copyToClipboard}
                                     className="w-full bg-black text-white py-6 rounded-2xl font-black text-xs uppercase tracking-[0.4em] shadow-xl hover:bg-secure transition-all flex items-center justify-center gap-3 group/btn"
