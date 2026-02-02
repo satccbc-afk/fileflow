@@ -1,5 +1,6 @@
 import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
+import "@uploadthing/react/styles.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { GlobalMouse } from "@/components/GlobalMouse";
