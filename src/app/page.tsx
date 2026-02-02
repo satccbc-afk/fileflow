@@ -51,17 +51,17 @@ export default function Home() {
 
 
         {/* HERO SECTION: SPATIAL SPLIT */}
-        <section className="w-full max-w-[1200px] mx-auto px-6 pt-40 pb-32 min-h-screen flex flex-col lg:flex-row items-center gap-16">
-          <div className="flex-1 text-left">
+        <section className="w-full max-w-[1200px] mx-auto px-6 pt-32 pb-20 min-h-screen grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
+          <div className="text-left z-10">
             <motion.div
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              className="pill mb-10 w-fit"
+              className="pill mb-8 w-fit"
             >
               Quantum Systems v2.5
             </motion.div>
 
-            <h1 className="text-[100px] md:text-[180px] font-semibold tracking-[-0.08em] leading-[0.8] mb-24">
+            <h1 className="text-[60px] md:text-[100px] font-semibold tracking-[-0.08em] leading-[0.9] mb-12">
               <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6 }} className="text-neutral-700">
                 Share.
               </motion.div>
@@ -77,7 +77,7 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1, delay: 0.8 }}
-              className="text-2xl text-seamless max-w-lg font-black uppercase tracking-tighter leading-tight mb-16"
+              className="text-xl text-seamless max-w-lg font-black uppercase tracking-tighter leading-tight mb-12"
             >
               The world's most advanced file movement protocol. <br />
               <span className="text-share">Encrypted by AI.</span> Distributed by Mesh.
@@ -90,12 +90,12 @@ export default function Home() {
               className="flex items-center gap-10"
             >
               <div className="flex flex-col">
-                <span className="text-3xl font-black">100GB</span>
+                <span className="text-2xl font-black">100GB</span>
                 <span className="text-[10px] font-black uppercase text-seamless tracking-widest">Free Limit</span>
               </div>
-              <div className="w-px h-12 bg-black/10" />
+              <div className="w-px h-10 bg-black/10" />
               <div className="flex flex-col">
-                <span className="text-3xl font-black">0s</span>
+                <span className="text-2xl font-black">0s</span>
                 <span className="text-[10px] font-black uppercase text-seamless tracking-widest">Setup Time</span>
               </div>
             </motion.div>
@@ -105,7 +105,7 @@ export default function Home() {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="flex-1 w-full max-w-xl animate-spatial"
+            className="w-full max-w-md mx-auto lg:ml-auto animate-spatial z-20"
           >
             <UploadZone />
           </motion.div>
