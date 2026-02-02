@@ -9,7 +9,7 @@ export function Footer() {
             <div className="container mx-auto px-6 relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-24 mb-32">
                     <div className="col-span-1 lg:col-span-2">
-                        <h2 className="text-4xl font-black font-heading mb-10 tracking-tighter text-share">MyDrop Transfer_</h2>
+                        <h2 className="text-3xl md:text-4xl font-black font-heading mb-10 tracking-tighter text-share">MyDrop Transfer_</h2>
                         <p className="text-seamless text-xl max-w-sm leading-relaxed mb-12 font-black uppercase tracking-tighter">
                             World class infrastructure for high speed data movement. Secure by design.
                         </p>
@@ -88,13 +88,13 @@ export function Footer() {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="border-t border-black/5 pt-10 flex flex-col md:flex-row items-center justify-between gap-6 text-[9px] font-black uppercase tracking-[0.2em] text-black/20">
+                <div className="border-t border-black/5 pt-10 flex flex-col md:flex-row items-center justify-between gap-6 text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-black/20 text-center md:text-left">
                     <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                         <span>All Systems Operational</span>
                     </div>
                     <div>
-                        © 2026 MYDROP TRANSFER <span className="mx-6">//</span> MATTE_V2.0
+                        © 2026 MYDROP TRANSFER <span className="mx-2 md:mx-6 block md:inline my-2 md:my-0">//</span> MATTE_V2.0
                     </div>
                 </div>
             </div>
