@@ -73,34 +73,38 @@ export function VaultContent({ id }: { id: string }) {
     const handleDownload = async (file: TransferData['files'][0]) => {
         if (!file.url) return;
 
-        // If no IV or no Key, assume unencrypted (Legacy)
-        if (!file.iv || !decryptionKey) {
-            window.open(file.url, '_blank');
-            return;
-        }
-
         try {
-            // Fetch Encrypted Blob
+            // Case 1: Encrypted (Legacy or Specific Mode)
+            if (file.iv && decryptionKey) {
+                const response = await fetch(file.url);
+                const blob = await response.blob();
+                const ivBuffer = base64ToArrayBuffer(file.iv);
+                const decryptedBlob = await decryptFile(blob, decryptionKey, new Uint8Array(ivBuffer));
+                triggerDownload(decryptedBlob, file.name);
+                return;
+            }
+
+            // Case 2: Standard Upload (UploadThing) - Force Download
             const response = await fetch(file.url);
             const blob = await response.blob();
+            triggerDownload(blob, file.name);
 
-            // Decrypt
-            const ivBuffer = base64ToArrayBuffer(file.iv);
-            const decryptedBlob = await decryptFile(blob, decryptionKey, new Uint8Array(ivBuffer));
-
-            // Download
-            const url = URL.createObjectURL(decryptedBlob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = file.name;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
         } catch (error) {
-            console.error("Decryption failed:", error);
-            alert("Failed to decrypt file. Key might be invalid.");
+            console.error("Download failed:", error);
+            // Fallback: Just open it if fetch/blob fails (e.g. CORS issues)
+            window.open(file.url, '_blank');
         }
+    };
+
+    const triggerDownload = (blob: Blob, filename: string) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     };
 
     const formatSize = (bytes: number) => {
