@@ -48,7 +48,6 @@ export function UploadZone() {
         onClientUploadComplete: async (res) => {
             if (!res) return;
 
-            setStatus("success");
             const tid = "v-" + Math.random().toString(36).substring(7);
 
             // Register transfer in DB
@@ -76,9 +75,11 @@ export function UploadZone() {
 
                 const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
                 setShareLink(`${baseUrl}/vault/${tid}`);
+                setStatus("success");
             } catch (e) {
                 console.error("Failed to register transfer", e);
                 setErrorMessage("Transfer registered failed");
+                setStatus("idle");
             }
         },
         onUploadError: (error: Error) => {
