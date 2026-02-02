@@ -21,9 +21,10 @@ export function UploadZone() {
         setFiles(prev => [...prev, ...acceptedFiles]);
     }, []);
 
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
         onDrop,
         maxSize: 1024 * 1024 * 1024 * 1024, // 1TB cap (backend enforces real limit)
+        noClick: files.length > 0 // We handle clicks manually when files exist
     });
 
     const formatSize = (bytes: number) => {
@@ -155,9 +156,9 @@ export function UploadZone() {
     return (
         <div className="w-full max-w-2xl mx-auto">
             <AnimatePresence mode="wait">
-                {status === "idle" && (
+                {status === "idle" && files.length === 0 && (
                     <motion.div
-                        key="idle"
+                        key="dropzone"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95 }}
@@ -224,89 +225,113 @@ export function UploadZone() {
                                 <span className="text-[10px] font-bold uppercase tracking-widest text-black">100GB Free</span>
                             </div>
                         </div>
+                    </motion.div>
+                )}
 
-                        {files.length > 0 && (
-                            <motion.div
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: "auto" }}
-                                className="w-full mt-10 space-y-4"
-                            >
-                                <div className="bento-card p-8 border-2 border-black/5">
-                                    <div className="flex items-center justify-between mb-8">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 bg-secure/10 rounded-xl flex items-center justify-center text-secure">
-                                                <Sparkles className="w-5 h-5" />
-                                            </div>
-                                            <div>
-                                                <h4 className="text-sm font-black text-black">READY TO SEND</h4>
-                                                <p className="text-[10px] font-bold text-black/30 uppercase tracking-widest">{files.length} items selected</p>
-                                            </div>
-                                        </div>
-                                        <button onClick={reset} className="text-[10px] font-black uppercase text-black/20 hover:text-black transition-colors">Clear All</button>
+                {status === "idle" && files.length > 0 && (
+                    <motion.div
+                        key="filelist"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        className="w-full space-y-4"
+                    >
+                        <div className="bento-card p-10 border-2 border-black/5 bg-white/80 backdrop-blur-xl shadow-2xl">
+                            <div className="flex items-center justify-between mb-8">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-secure/10 rounded-2xl flex items-center justify-center text-secure shadow-inner">
+                                        <Sparkles className="w-6 h-6" />
                                     </div>
-
-                                    <div className="max-h-60 overflow-y-auto px-2 space-y-3 custom-scrollbar mb-8">
-                                        {files.map((file, i) => (
-                                            <motion.div
-                                                initial={{ x: -10, opacity: 0 }}
-                                                animate={{ x: 0, opacity: 1 }}
-                                                key={i}
-                                                className="flex items-center justify-between p-4 bg-black/[0.02] rounded-2xl group/file"
-                                            >
-                                                <div className="flex items-center gap-3 truncate">
-                                                    <File className="w-4 h-4 text-black/20 group-hover/file:text-black transition-colors" />
-                                                    <span className="text-xs font-bold text-black/70 truncate max-w-[200px]">{file.name}</span>
-                                                    <span className="text-[10px] font-bold text-black/30 uppercase tracking-widest">{formatSize(file.size)}</span>
-                                                </div>
-                                                <button onClick={() => removeFile(file)} className="p-2 hover:bg-red-500/10 rounded-full group transition-colors">
-                                                    <X className="w-4 h-4 text-black/20 group-hover:text-red-500 transition-colors" />
-                                                </button>
-                                            </motion.div>
-                                        ))}
+                                    <div>
+                                        <h4 className="text-lg font-black font-heading tracking-tight text-black">READY TO SEND</h4>
+                                        <p className="text-[10px] font-bold text-black/40 uppercase tracking-widest">{files.length} items selected</p>
                                     </div>
-
-                                    <div className="flex items-center justify-between mb-8 px-2 gap-4">
-                                        <div className="flex items-center gap-2">
-                                            <Lock className="w-4 h-4 text-black/30" />
-                                            <input
-                                                id="transfer-password"
-                                                type="text"
-                                                placeholder="OPTIONAL PASSWORD"
-                                                className="bg-transparent text-[10px] font-black uppercase tracking-widest text-black placeholder:text-black/30 focus:outline-none w-32"
-                                            />
-                                        </div>
-
-                                        <div className="flex items-center gap-2">
-                                            <Clock className="w-4 h-4 text-black/30" />
-                                            <select
-                                                id="transfer-expiry"
-                                                className="bg-transparent text-[10px] font-black uppercase tracking-widest text-black focus:outline-none cursor-pointer"
-                                                defaultValue="1"
-                                            >
-                                                <option value="1">24 Hours</option>
-                                                <option value="3">3 Days</option>
-                                                <option value="7">7 Days</option>
-                                                <option value="30">30 Days</option>
-                                            </select>
-                                        </div>
-
-                                        <span className="text-[10px] font-black uppercase tracking-widest text-secure/60 bg-secure/5 px-2 py-1 rounded">V3.0 Encrypted Cloud</span>
-                                    </div>
-
-                                    <button
-                                        onClick={handleUpload}
-                                        className="w-full bg-black text-white py-6 rounded-[2rem] font-black text-sm uppercase tracking-[0.3em] shadow-2xl hover:bg-secure transition-all active:scale-95 group"
-                                    >
-                                        <span className="flex items-center justify-center gap-3">
-                                            Start Upload
-                                            <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity }}>
-                                                <ArrowUp className="w-4 h-4" />
-                                            </motion.div>
-                                        </span>
+                                </div>
+                                <div className="flex gap-4">
+                                    <button onClick={open} className="text-[10px] font-black uppercase text-black/40 hover:text-black transition-colors flex items-center gap-2 bg-black/5 px-3 py-2 rounded-lg hover:bg-black/10">
+                                        <Upload className="w-3 h-3" /> Add More
+                                    </button>
+                                    <button onClick={reset} className="text-[10px] font-black uppercase text-red-500/40 hover:text-red-500 transition-colors flex items-center gap-2 px-3 py-2">
+                                        Clear All
                                     </button>
                                 </div>
-                            </motion.div>
-                        )}
+                            </div>
+
+                            <div className="max-h-72 overflow-y-auto pr-2 space-y-3 custom-scrollbar mb-10">
+                                {files.map((file, i) => (
+                                    <motion.div
+                                        initial={{ x: -10, opacity: 0 }}
+                                        animate={{ x: 0, opacity: 1 }}
+                                        key={i}
+                                        className="flex items-center justify-between p-4 bg-black/[0.03] rounded-2xl group/file border border-transparent hover:border-black/5 transition-all"
+                                    >
+                                        <div className="flex items-center gap-4 truncate">
+                                            <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm">
+                                                <File className="w-5 h-5 text-black/40 group-hover/file:text-black transition-colors" />
+                                            </div>
+                                            <div className="flex flex-col truncate">
+                                                <span className="text-sm font-bold text-black/80 truncate max-w-[200px]">{file.name}</span>
+                                                <span className="text-[10px] font-bold text-black/30 uppercase tracking-widest">{formatSize(file.size)}</span>
+                                            </div>
+                                        </div>
+                                        <button onClick={() => removeFile(file)} className="p-2 hover:bg-red-500/10 rounded-full group transition-colors">
+                                            <X className="w-4 h-4 text-black/20 group-hover:text-red-500 transition-colors" />
+                                        </button>
+                                    </motion.div>
+                                ))}
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 pt-8 border-t border-black/5">
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-black/40 flex items-center gap-2">
+                                        <Lock className="w-3 h-3" /> Password Protection
+                                    </label>
+                                    <input
+                                        id="transfer-password"
+                                        type="text"
+                                        placeholder="OPTIONAL"
+                                        className="bg-black/[0.03] border border-black/5 rounded-xl px-4 py-3 text-xs font-bold text-black placeholder:text-black/20 focus:outline-none focus:border-black/20 focus:bg-white transition-all w-full"
+                                    />
+                                </div>
+
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-black/40 flex items-center gap-2">
+                                        <Clock className="w-3 h-3" /> Expiration
+                                    </label>
+                                    <div className="relative">
+                                        <select
+                                            id="transfer-expiry"
+                                            className="appearance-none bg-black/[0.03] border border-black/5 rounded-xl px-4 py-3 text-xs font-bold text-black focus:outline-none focus:border-black/20 focus:bg-white transition-all w-full cursor-pointer"
+                                            defaultValue="1"
+                                        >
+                                            <option value="1">24 Hours</option>
+                                            <option value="3">3 Days</option>
+                                            <option value="7">7 Days</option>
+                                            <option value="30">30 Days</option>
+                                        </select>
+                                        <ArrowUp className="w-3 h-3 text-black/40 absolute right-4 top-1/2 -translate-y-1/2 rotate-180 pointer-events-none" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={handleUpload}
+                                className="w-full bg-black text-white py-6 rounded-[2rem] font-black text-sm uppercase tracking-[0.3em] shadow-2xl hover:bg-secure hover:shadow-secure/20 transition-all active:scale-[0.98] group relative overflow-hidden"
+                            >
+                                <span className="relative z-10 flex items-center justify-center gap-3">
+                                    Start Secure Transfer
+                                    <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
+                                        <ArrowUp className="w-4 h-4" />
+                                    </motion.div>
+                                </span>
+                            </button>
+
+                            <div className="mt-6 text-center">
+                                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-secure/60 bg-secure/5 px-3 py-1.5 rounded-full inline-flex items-center gap-2">
+                                    <ShieldCheck className="w-3 h-3" />
+                                    V3.0 Encrypted Cloud
+                                </span>
+                            </div>
+                        </div>
                     </motion.div>
                 )}
 
