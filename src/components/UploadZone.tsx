@@ -135,11 +135,11 @@ export function UploadZone() {
                         <div
                             {...getRootProps()}
                             className={cn(
-                                "w-full p-20 rounded-[3rem] flex flex-col items-center justify-center cursor-pointer relative overflow-hidden transition-all duration-500",
-                                "bg-white backdrop-blur-2xl border border-black/10 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.15)]", // Increased authority
+                                "w-full p-12 rounded-[2.5rem] flex flex-col items-center justify-center cursor-pointer relative overflow-hidden transition-all duration-500",
+                                "bg-white/80 backdrop-blur-3xl border border-white/40 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)]", // Refined glassmorphism
                                 isDragActive
-                                    ? "bg-red-50/50 border-red-500/20 scale-[1.01]"
-                                    : "hover:bg-white hover:shadow-[0_40px_100px_-30px_rgba(0,0,0,0.2)] hover:border-black/20"
+                                    ? "bg-red-50/80 border-red-500/30 scale-[1.02] shadow-red-500/10"
+                                    : "hover:bg-white/90 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.15)] hover:border-white/60"
                             )}
                         >
                             <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat" />
