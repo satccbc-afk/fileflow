@@ -41,9 +41,9 @@ export async function GET(
         // Generate Presigned GET URLs for S3 files
         const transferObj = transfer.toObject();
         const filesWithUrls = await Promise.all(transferObj.files.map(async (file: any) => {
-            // Case 1: External Link (Google Drive)
-            if (file.externalUrl) {
-                return { ...file, url: file.externalUrl };
+            // Case 1: External Link (Google Drive) or UploadThing URL
+            if (file.externalUrl || file.url) {
+                return { ...file, url: file.externalUrl || file.url };
             }
 
             // Case 2: S3 File

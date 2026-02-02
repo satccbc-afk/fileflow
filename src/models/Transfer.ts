@@ -6,7 +6,8 @@ const TransferSchema = new Schema({
         name: { type: String, required: true },
         size: { type: Number, required: true },
         type: { type: String },
-        key: { type: String }, // S3 Key
+        key: { type: String }, // S3 Key or UploadThing Key
+        url: { type: String }, // UploadThing URL
         bucket: { type: String }, // S3 Bucket
         externalUrl: { type: String }, // Google Drive / External Link
         iv: { type: String }, // AES-GCM IV

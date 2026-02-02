@@ -61,7 +61,7 @@ export function UploadZone() {
                     url: f.url,
                 }));
 
-                await fetch("/api/upload", {
+                const response = await fetch("/api/upload", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -71,6 +71,8 @@ export function UploadZone() {
                         expiresIn: (document.getElementById('transfer-expiry') as HTMLSelectElement)?.value || "1"
                     })
                 });
+
+                if (!response.ok) throw new Error("Server registration failed");
 
                 const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
                 setShareLink(`${baseUrl}/vault/${tid}`);

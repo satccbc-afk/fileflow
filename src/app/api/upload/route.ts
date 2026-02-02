@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     try {
         await dbConnect();
         const session = await auth(); // Get Session
-        const { files, transferId, expiresIn } = await req.json();
+        const { files, transferId, expiresIn, password } = await req.json();
 
         const expiresAt = new Date();
         const days = parseInt(expiresIn) || 1;
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
             files,
             expiresAt,
             ownerEmail: session?.user?.email || null,
-            password: transferId.password || null,
+            password: password || null,
         });
 
         if (session?.user?.email) {
