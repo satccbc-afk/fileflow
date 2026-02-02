@@ -3,6 +3,8 @@
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { Upload, File, X, CheckCircle2, ShieldCheck, Sparkles, BrainCircuit, Zap, ArrowUp, Globe, Shield, Activity, Copy, RefreshCw, Lock, Package, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { generateKey, exportKey, encryptFile, arrayBufferToBase64 } from "@/lib/crypto";
@@ -10,6 +12,8 @@ import { generateKey, exportKey, encryptFile, arrayBufferToBase64 } from "@/lib/
 type UploadStatus = "idle" | "scanning" | "uploading" | "success";
 
 export function UploadZone() {
+    const { data: session } = useSession();
+    const router = useRouter();
     const [files, setFiles] = useState<File[]>([]);
     const [status, setStatus] = useState<UploadStatus>("idle");
     const [progress, setProgress] = useState(0);
@@ -41,6 +45,12 @@ export function UploadZone() {
 
     const handleUpload = async () => {
         if (files.length === 0) return;
+
+        if (!session) {
+            router.push("/signup");
+            return;
+        }
+
         setScanLines([]);
         setErrorMessage("");
 
@@ -320,7 +330,7 @@ export function UploadZone() {
                                 className="w-full bg-black text-white py-6 rounded-[2rem] font-black text-sm uppercase tracking-[0.3em] shadow-2xl hover:bg-secure hover:shadow-secure/20 transition-all active:scale-[0.98] group relative overflow-hidden"
                             >
                                 <span className="relative z-10 flex items-center justify-center gap-3">
-                                    Start Secure Transfer
+                                    {session ? "Start Secure Transfer" : "Sign In to Transfer"}
                                     <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
                                         <ArrowUp className="w-4 h-4" />
                                     </motion.div>
