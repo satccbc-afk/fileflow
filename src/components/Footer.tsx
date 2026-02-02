@@ -32,7 +32,7 @@ export function Footer() {
                     </div>
 
                     {/* Links Grid */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+                    <div className="col-span-1 lg:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-12">
                         {[
                             {
                                 head: "Product",
