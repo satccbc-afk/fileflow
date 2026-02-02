@@ -17,8 +17,12 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, "Please provide a password"],
+        required: false, // Optional for OAuth users
         minlength: [6, "Password must be at least 6 characters"],
+    },
+    provider: {
+        type: String,
+        default: "credentials",
     },
     image: {
         type: String,
