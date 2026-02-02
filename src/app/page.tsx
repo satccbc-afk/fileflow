@@ -30,7 +30,7 @@ export default function Home() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
-            "name": "Fileflow",
+            "name": "MyDrop Transfer",
             "applicationCategory": "ProductivityApplication",
             "operatingSystem": "Web",
             "offers": {
@@ -51,7 +51,7 @@ export default function Home() {
 
 
         {/* HERO SECTION: SPATIAL SPLIT */}
-        <section className="container mx-auto px-6 pt-52 pb-32 min-h-screen flex flex-col lg:flex-row items-center gap-24">
+        <section className="container mx-auto px-6 pt-52 pb-32 min-h-screen flex flex-col lg:flex-row items-center gap-16">
           <div className="flex-1 text-left">
             <motion.div
               initial={{ x: -20, opacity: 0 }}
@@ -61,14 +61,14 @@ export default function Home() {
               Quantum Systems v2.5
             </motion.div>
 
-            <h1 className="text-[100px] md:text-[180px] font-black tracking-[-0.08em] leading-[0.75] text-share mb-12">
-              <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6 }}>
+            <h1 className="text-[100px] md:text-[180px] font-semibold tracking-[-0.08em] leading-[0.8] mb-24">
+              <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6 }} className="text-neutral-700">
                 Share.
               </motion.div>
               <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6, delay: 0.1 }} className="text-secure">
                 Secure.
               </motion.div>
-              <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6, delay: 0.2 }} className="text-seamless font-light italic">
+              <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6, delay: 0.2 }} className="text-neutral-500">
                 Seamless.
               </motion.div>
             </h1>
@@ -114,7 +114,7 @@ export default function Home() {
         {/* BENTO GRID: THE STACK */}
         <section id="features" className="container mx-auto px-6 py-40">
           <div className="mb-24">
-            <h2 className="text-5xl md:text-8xl font-black tracking-tight mb-8">THE <span className="text-secure">STACK.</span></h2>
+            <h2 className="text-5xl md:text-8xl font-black tracking-tight mb-8">THE <span className="text-share">STACK.</span></h2>
             <p className="text-xl text-seamless font-black uppercase tracking-widest">Future-Proofed Infrastructure</p>
           </div>
 
@@ -186,7 +186,7 @@ export default function Home() {
         <section className="container mx-auto px-6 py-60 text-center relative">
           <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
             <h2 className="text-[200px] md:text-[400px] font-black text-black/[0.02] tracking-[-0.1em] whitespace-nowrap animate-spatial">
-              FILEFLOW SYSTEMS
+              MYDROP TRANSFER SYSTEMS
             </h2>
           </div>
           <div className="relative z-10">

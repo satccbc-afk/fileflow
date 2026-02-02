@@ -9,7 +9,7 @@ export default function GDPRPage() {
     return (
         <main className="relative min-h-screen text-share font-sans selection:bg-secure/10">
             <div className="content-wrapper">
-                
+
 
                 <section className="container mx-auto px-6 pt-56 pb-40">
                     <div className="max-w-4xl mx-auto">
@@ -38,7 +38,7 @@ export default function GDPRPage() {
                                 <div className="bento-card">
                                     <FileText className="w-8 h-8 text-secure mb-4" />
                                     <h3 className="text-xl font-black uppercase text-black">Right to Erasure</h3>
-                                    <p className="text-sm text-black/40 font-bold leading-relaxed">You have the absolute right to have your data purged. On Fileflow, this is automated—files are deleted permanently after expiry.</p>
+                                    <p className="text-sm text-black/40 font-bold leading-relaxed">You have the absolute right to have your data purged. On MyDrop Transfer, this is automated—files are deleted permanently after expiry.</p>
                                 </div>
                                 <div className="bento-card">
                                     <UserCheck className="w-8 h-8 text-secure mb-4" />
@@ -51,14 +51,14 @@ export default function GDPRPage() {
                                 <Shield className="w-10 h-10 text-secure mb-6" />
                                 <h2 className="text-2xl font-black mb-4 uppercase text-black">Data Protection Officer</h2>
                                 <p className="text-black/40 font-bold leading-relaxed">
-                                    Our dedicated DPO ensures that Fileflow adheres to the highest standards of data security and regulatory compliance every single day.
+                                    Our dedicated DPO ensures that MyDrop Transfer adheres to the highest standards of data security and regulatory compliance every single day.
                                 </p>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                
+
             </div>
         </main>
     );

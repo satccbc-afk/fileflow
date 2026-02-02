@@ -40,6 +40,15 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    stripeCustomerId: {
+        type: String,
+    },
+    stripeSubscriptionId: {
+        type: String,
+    },
+    subscriptionStatus: {
+        type: String,
+    },
 });
 
 export const User = mongoose.models.User || mongoose.model("User", UserSchema);

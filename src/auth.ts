@@ -36,6 +36,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         signIn: '/login',
     },
     callbacks: {
+        async signIn({ user, account, profile }) {
+            if (account?.provider === "google") {
+                await dbConnect();
+                try {
+                    const existingUser = await User.findOne({ email: user.email });
+                    if (!existingUser) {
+                        await User.create({
+                            email: user.email,
+                            name: user.name,
+                            image: user.image,
+                            plan: "free",
+                            provider: "google",
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error creating user during sign in:", error);
+                    return false;
+                }
+            }
+            return true;
+        },
         async session({ session, token }) {
             if (session.user && token.sub) {
                 // @ts-ignore

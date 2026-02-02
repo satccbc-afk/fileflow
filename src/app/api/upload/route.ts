@@ -7,16 +7,18 @@ export async function POST(req: Request) {
     try {
         await dbConnect();
         const session = await auth(); // Get Session
-        const { files, transferId } = await req.json();
+        const { files, transferId, expiresIn } = await req.json();
 
         const expiresAt = new Date();
-        expiresAt.setHours(expiresAt.getHours() + 24);
+        const days = parseInt(expiresIn) || 1;
+        expiresAt.setDate(expiresAt.getDate() + days);
 
         const transfer = await Transfer.create({
             transferId,
             files,
             expiresAt,
-            ownerEmail: session?.user?.email || null, // Save Owner
+            ownerEmail: session?.user?.email || null,
+            password: transferId.password || null,
         });
 
         if (session?.user?.email) {

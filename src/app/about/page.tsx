@@ -9,7 +9,7 @@ export default function AboutPage() {
     return (
         <main className="relative min-h-screen text-share font-sans selection:bg-secure/10">
             <div className="content-wrapper">
-                
+
 
                 <section className="container mx-auto px-6 pt-56 pb-32">
                     <div className="max-w-5xl mx-auto text-center mb-40">
@@ -38,7 +38,7 @@ export default function AboutPage() {
                         >
                             <h2 className="text-4xl font-black mb-8 underline decoration-secure decoration-8 underline-offset-[10px]">The Original Idea</h2>
                             <p className="text-lg text-seamless font-bold leading-relaxed">
-                                Fileflow started as a simple question: "Why is moving large files so painful?" <br /><br />
+                                MyDrop Transfer started as a simple question: "Why is moving large files so painful?" <br /><br />
                                 Legacy platforms are cluttered with ads, slow speeds, and intrusive tracking. We wanted to build a portal that was as invisible as it was powerful. A place where data moves at the speed of thought.
                             </p>
                         </motion.div>
@@ -68,7 +68,7 @@ export default function AboutPage() {
                     </div>
                 </section>
 
-                
+
             </div>
         </main>
     );

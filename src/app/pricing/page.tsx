@@ -2,8 +2,10 @@
 
 
 
-import { Check, Sparkles, Zap, Shield, Crown } from "lucide-react";
+import { Check, Sparkles, Zap, Shield, Crown, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { UpgradeButton } from "@/components/UpgradeButton";
+import Link from "next/link";
 
 const plans = [
     {
@@ -96,12 +98,18 @@ export default function PricingPage() {
                                     ))}
                                 </ul>
 
-                                <button className={cn(
-                                    "w-full py-6 rounded-2xl font-black text-xs uppercase tracking-[0.4em] transition-all shadow-xl active:scale-95",
-                                    plan.popular ? "bg-secure text-white hover:bg-share" : "bg-share text-white hover:bg-secure"
-                                )}>
-                                    {plan.cta}
-                                </button>
+                                {plan.name === "Pro" ? (
+                                    <div className="w-full">
+                                        <UpgradeButton />
+                                    </div>
+                                ) : (
+                                    <Link href="/signup" className={cn(
+                                        "block text-center w-full py-6 rounded-2xl font-black text-xs uppercase tracking-[0.4em] transition-all shadow-xl active:scale-95",
+                                        "bg-share text-white hover:bg-secure"
+                                    )}>
+                                        {plan.cta}
+                                    </Link>
+                                )}
                             </motion.div>
                         ))}
                     </div>

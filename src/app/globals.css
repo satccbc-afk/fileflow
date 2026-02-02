@@ -4,31 +4,78 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui;
   --font-heading: var(--font-outfit), ui-sans-serif, system-ui;
 
-  /* MINIMAL AESTHETIC COLORS */
-  --color-share: #0A0A0A;
-  --color-secure: #2E2E2E;
-  --color-seamless: #6B6B6B;
+  /* PREMIUM TOKENS */
+  --color-neutral-900: var(--neutral-900);
+  --color-neutral-700: var(--neutral-700);
+  --color-neutral-500: var(--neutral-500);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-200: var(--neutral-200);
 
-  --color-primary: #2E2E2E;
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-soft: var(--brand-primary-soft);
+
+  --color-state-success: var(--state-success);
+  --color-state-warning: var(--state-warning);
+  --color-state-error: var(--state-error);
+
+  --color-bg-page: var(--bg-page);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-muted: var(--bg-surface-muted);
+
+  /* Legacy Mapping for compatibility */
+  --color-share: var(--neutral-900);
+  --color-secure: var(--brand-primary);
+  --color-seamless: var(--neutral-500);
+
+  --color-primary: var(--neutral-900);
   --color-primary-foreground: #FFFFFF;
 }
 
 :root {
-  --background: #FAFAFA;
-  --foreground: #0A0A0A;
-  --base-bg: #FAFAFA;
-  --surface: #FFFFFF;
+  /* Core Neutrals */
+  --neutral-900: #0F0F10;
+  --neutral-700: #3A3A3D;
+  --neutral-500: #6B6B6E;
+  --neutral-300: #BEBEC2;
+  --neutral-200: #E8E8E5;
 
-  /* Minimal palette */
-  --text-primary: #0A0A0A;
-  --text-secondary: #6B6B6B;
-  --charcoal: #2E2E2E;
-  --light-gray: #E8E8E8;
-  --border: #E0E0E0;
+  /* Backgrounds */
+  --bg-page: #FAFAF8;
+  --bg-surface: #FFFFFF;
+  --bg-surface-muted: #F4F4F2;
 
-  /* Red accent - refined and minimal */
-  --red-accent: #DC2626;
-  --red-soft: #FEF2F2;
+  /* Brand Accent */
+  --brand-primary: #C6362E;
+  --brand-primary-hover: #B12F28;
+  --brand-primary-pressed: #9E2A24;
+  --brand-primary-soft: rgba(198, 54, 46, 0.08);
+
+  /* Functional States */
+  --state-success: #2E7D5A;
+  --state-warning: #C47A2C;
+  --state-error: #C6362E;
+
+  /* Borders */
+  --border-default: #E8E8E5;
+  --border-hover: #D6D6D3;
+  --border-active: #C6362E;
+
+  /* Upload Zone */
+  --upload-border-idle: #DADAD7;
+  --upload-border-hover: #C6362E;
+  --upload-bg-active: rgba(198, 54, 46, 0.05);
+
+  /* Legacy Vars */
+  --text-primary: var(--neutral-900);
+  --text-secondary: var(--neutral-500);
+  --charcoal: var(--neutral-900);
+  --light-gray: var(--neutral-200);
+  --border: var(--border-default);
+
+  --surface: var(--bg-surface);
+  --base-bg: var(--bg-page);
+  --red-accent: var(--brand-primary);
+  --red-soft: var(--brand-primary-soft);
 
   --aura-color: rgba(0, 0, 0, 0.03);
   --silk-glow: rgba(0, 0, 0, 0.01);
@@ -36,9 +83,8 @@
 
 @layer base {
   body {
-    background: linear-gradient(135deg, #FAFAFA 0%, #FEF2F2 50%, #FFFFFF 100%);
-    background-attachment: fixed;
-    color: var(--text-primary);
+    background: var(--bg-page);
+    color: var(--neutral-900);
     font-family: var(--font-inter);
     margin: 0;
     position: relative;
@@ -55,7 +101,7 @@
     width: 100%;
     height: 100%;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.015;
+    opacity: 0.01;
     pointer-events: none;
     z-index: 9999;
   }
@@ -77,7 +123,7 @@
   position: absolute;
   border-radius: 50%;
   filter: blur(120px);
-  opacity: 0.4;
+  opacity: 0.2;
   pointer-events: none;
   animation: orb-float 20s infinite ease-in-out;
 }
@@ -309,10 +355,10 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.1);
+  background: var(--neutral-300);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-secure);
+  background: var(--brand-primary);
 }

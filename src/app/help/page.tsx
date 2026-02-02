@@ -40,7 +40,7 @@ export default function HelpPage() {
                         <div className="bento-card group cursor-pointer hover:border-secure/30 transition-colors">
                             <Book className="w-10 h-10 text-secure mb-6 group-hover:scale-110 transition-transform" />
                             <h3 className="text-2xl font-black mb-4 uppercase tracking-tighter text-black">Documentation</h3>
-                            <p className="text-black/40 font-bold leading-relaxed mb-8">Detailed technical guides for integrating Fileflow into your workflow.</p>
+                            <p className="text-black/40 font-bold leading-relaxed mb-8">Detailed technical guides for integrating MyDrop Transfer into your workflow.</p>
                             <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-secure">
                                 Read Docs <ArrowRight className="w-4 h-4" />
                             </div>

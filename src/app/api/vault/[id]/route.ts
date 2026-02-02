@@ -15,7 +15,7 @@ export async function GET(
         const { id } = await params;
         console.log("Vault Request Received for ID:", id);
 
-        const transfer = await Transfer.findOne({ transferId: id });
+        const transfer = await Transfer.findOne({ transferId: id }).select("+password");
         console.log("Database lookup result:", transfer ? "Found" : "Not Found");
 
         if (!transfer) {
@@ -25,6 +25,16 @@ export async function GET(
         // Check expiry
         if (new Date() > new Date(transfer.expiresAt)) {
             return NextResponse.json({ success: false, error: "Transfer expired" }, { status: 410 });
+        }
+
+        // Check Password Protection
+        if (transfer.password) {
+            const { searchParams } = new URL(req.url);
+            const providedPassword = searchParams.get("password");
+
+            if (transfer.password !== providedPassword) {
+                return NextResponse.json({ success: false, error: "Password Required", requiresPassword: true }, { status: 403 });
+            }
         }
 
 
@@ -73,8 +83,17 @@ export async function DELETE(
         const { id } = await params;
         const session = await auth();
 
-        // Only Admin can DELETE (Global Moderate)
-        if (session?.user?.email !== process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
+        // Allow Admin OR Owner
+        const transfer = await Transfer.findOne({ transferId: id });
+
+        if (!transfer) {
+            return NextResponse.json({ success: false, error: "Transfer not found" }, { status: 404 });
+        }
+
+        const isOwner = session?.user?.email && transfer.ownerEmail === session.user.email;
+        const isAdmin = session?.user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL;
+
+        if (!isOwner && !isAdmin) {
             return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 403 });
         }
 

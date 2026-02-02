@@ -9,7 +9,7 @@ export default function CompliancePage() {
     return (
         <main className="relative min-h-screen text-share font-sans selection:bg-secure/10">
             <div className="content-wrapper">
-                
+
 
                 <section className="container mx-auto px-6 pt-56 pb-40">
                     <div className="max-w-4xl mx-auto">
@@ -30,7 +30,7 @@ export default function CompliancePage() {
                                 <ShieldCheck className="w-10 h-10 text-secure mb-6" />
                                 <h2 className="text-3xl font-black mb-6 uppercase tracking-tighter text-black">Industry Certifications</h2>
                                 <p className="text-black/40 font-bold leading-relaxed text-lg">
-                                    Fileflow Systems undergoes rigorous third-party audits annually to maintain our SOC 2 Type II and ISO 27001 certifications. We ensure that our internal protocols exceed global enterprise security standards.
+                                    MyDrop Transfer Systems undergoes rigorous third-party audits annually to maintain our SOC 2 Type II and ISO 27001 certifications. We ensure that our internal protocols exceed global enterprise security standards.
                                 </p>
                             </div>
 
@@ -48,14 +48,14 @@ export default function CompliancePage() {
                             <div className="bento-card border-none bg-black text-white p-16">
                                 <h2 className="text-3xl font-black mb-4 uppercase tracking-tighter text-secure">Zero-Liability Infrastructure</h2>
                                 <p className="text-white/40 font-medium leading-relaxed">
-                                    Because we never store your encryption keys, we cannot be forced to disclose your data. Our infrastructure is legally and technically designed to protect your privacy at all costs.
+                                    Our dedicated DPO ensures that MyDrop Transfer adheres to the highest standards of data security and regulatory compliance every single day.structure is legally and technically designed to protect your privacy at all costs.
                                 </p>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                
+
             </div>
         </main>
     );

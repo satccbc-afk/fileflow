@@ -138,7 +138,7 @@ export function MinimalBackground() {
                 ctx!.beginPath();
                 // Gentle soft glow for particles
                 ctx!.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx!.fillStyle = "#DC2626";
+                ctx!.fillStyle = "rgba(0, 0, 0, 0.1)";
                 ctx!.fill();
             }
         }
@@ -158,7 +158,7 @@ export function MinimalBackground() {
                 p.update(mx, my, time);
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
-                ctx.fillStyle = "rgba(0, 0, 0, 0.4)"; // Clear charcoal
+                ctx.fillStyle = "rgba(0, 0, 0, 0.1)"; // Clear charcoal
                 ctx.fill();
             });
 
@@ -177,7 +177,7 @@ export function MinimalBackground() {
                         ctx.beginPath();
                         ctx.moveTo(p.x, p.y);
                         ctx.lineTo(p2.x, p2.y);
-                        ctx.strokeStyle = `rgba(220, 38, 38, ${0.3 * (1 - dist / 180)})`;
+                        ctx.strokeStyle = `rgba(0, 0, 0, ${0.1 * (1 - dist / 180)})`;
                         ctx.lineWidth = 1.5;
                         ctx.stroke();
                     }

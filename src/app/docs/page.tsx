@@ -9,14 +9,14 @@ const articles = [
     { title: "Getting Started", desc: "Learn how to send your first file in seconds." },
     { title: "Pro Accounts", desc: "Unlock massive transmission pipes and branding." },
     { title: "Security Guide", desc: "Understand how our zero-knowledge system works." },
-    { title: "API Reference", desc: "Technical details for integrating Fileflow." },
+    { title: "API Reference", desc: "Technical details for integrating MyDrop Transfer." },
 ];
 
 export default function DocsPage() {
     return (
         <main className="relative min-h-screen text-share font-sans selection:bg-secure/10">
             <div className="content-wrapper">
-                
+
 
                 <section className="container mx-auto px-6 pt-56 pb-40">
                     <div className="max-w-4xl mb-32">
@@ -63,7 +63,7 @@ export default function DocsPage() {
                     </div>
                 </section>
 
-                
+
             </div>
         </main>
     );

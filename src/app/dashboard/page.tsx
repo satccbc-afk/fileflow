@@ -1,15 +1,19 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import dbConnect from "@/lib/mongodb";
+import { User } from "@/models/User";
+import { UpgradeButton } from "@/components/UpgradeButton";
 import { Transfer } from "@/models/Transfer";
 import Link from "next/link";
 import { File, Clock, ExternalLink, ShieldCheck, Plus, Layers } from "lucide-react";
+import { DeleteTransferButton } from "@/components/DeleteTransferButton";
 
 export default async function DashboardPage() {
     const session = await auth();
     if (!session?.user?.email) redirect("/api/auth/signin");
 
     await dbConnect();
+    const user = await User.findOne({ email: session.user.email });
     const transfers = await Transfer.find({ ownerEmail: session.user.email }).sort({ createdAt: -1 });
 
     return (
@@ -22,11 +26,18 @@ export default async function DashboardPage() {
                                 <Layers className="w-7 h-7" />
                             </div>
                             <h1 className="text-4xl font-black font-heading tracking-tight">My Archive</h1>
+                            {user?.plan === 'pro' && (
+                                <span className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-lg">
+                                    PRO ACTIVE
+                                </span>
+                            )}
                         </div>
                         <p className="text-black/40 font-bold uppercase tracking-widest text-[10px]">Secure Storage • {transfers.length} Active transmissions</p>
                     </div>
 
                     <div className="flex items-center gap-4">
+                        {user?.plan !== 'pro' && <UpgradeButton />}
+
                         {(session.user?.email === "khushboom099@gmail.com" || session.user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL) && (
                             <Link
                                 href="/admin"
@@ -76,7 +87,8 @@ export default async function DashboardPage() {
                                     </div>
                                 </div>
 
-                                <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 border-black/5 pt-8 md:pt-0">
+                                <div className="flex items-center gap-4">
+                                    <DeleteTransferButton transferId={t.transferId} />
                                     <button
                                         onClick={() => {
                                             navigator.clipboard.writeText(`${window.location.origin}/vault/${t.transferId}`);
@@ -86,20 +98,20 @@ export default async function DashboardPage() {
                                     >
                                         Copy Link
                                     </button>
-                                    <div className="flex flex-col items-end mr-4">
-                                        <span className="text-[9px] font-black uppercase tracking-widest text-black/20 mb-1">Vault Key</span>
-                                        <code className="text-[11px] font-mono text-black/60 bg-black/5 px-3 py-1 rounded-lg">
-                                            {t.transferId}
-                                        </code>
-                                    </div>
-                                    <Link
-                                        href={`/vault/${t.transferId}`}
-                                        className="w-16 h-16 rounded-[2rem] bg-black text-white flex items-center justify-center hover:bg-secure transition-all shadow-xl hover:-rotate-6 active:scale-95"
-                                        title="Enter Vault"
-                                    >
-                                        <ExternalLink className="w-7 h-7" />
-                                    </Link>
                                 </div>
+                                <div className="flex flex-col items-end mr-4">
+                                    <span className="text-[9px] font-black uppercase tracking-widest text-black/20 mb-1">Vault Key</span>
+                                    <code className="text-[11px] font-mono text-black/60 bg-black/5 px-3 py-1 rounded-lg">
+                                        {t.transferId}
+                                    </code>
+                                </div>
+                                <Link
+                                    href={`/vault/${t.transferId}`}
+                                    className="w-16 h-16 rounded-[2rem] bg-black text-white flex items-center justify-center hover:bg-secure transition-all shadow-xl hover:-rotate-6 active:scale-95"
+                                    title="Enter Vault"
+                                >
+                                    <ExternalLink className="w-7 h-7" />
+                                </Link>
                             </div>
                         ))}
                     </div>

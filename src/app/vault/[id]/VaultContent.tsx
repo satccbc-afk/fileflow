@@ -6,9 +6,11 @@ import { Download, File, ShieldCheck, BrainCircuit, Activity, Clock, Lock, Globe
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 
+import { importKey, decryptFile, base64ToArrayBuffer } from "@/lib/crypto";
+
 interface TransferData {
     transferId: string;
-    files: Array<{ name: string; size: number; type: string }>;
+    files: Array<{ name: string; size: number; type: string; url: string; iv?: string }>; // iv is optional for legacy
     expiresAt: string;
 }
 
@@ -17,49 +19,89 @@ export function VaultContent({ id }: { id: string }) {
     const [data, setData] = useState<TransferData | null>(null);
     const [error, setError] = useState("");
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await fetch(`/api/vault/${id}`);
-                const json = await res.json();
+    const [password, setPassword] = useState("");
+    const [needsPassword, setNeedsPassword] = useState(false);
 
-                if (json.success) {
-                    setData(json.transfer);
-                    // Artificial "Decryption" delay for UX
-                    setTimeout(() => setStatus("decrypting"), 1500);
-                    setTimeout(() => setStatus("ready"), 4000);
+    const fetchData = async (pwd?: string) => {
+        try {
+            const url = pwd ? `/api/vault/${id}?password=${encodeURIComponent(pwd)}` : `/api/vault/${id}`;
+            const res = await fetch(url);
+            const json = await res.json();
+
+            if (json.success) {
+                setData(json.transfer);
+                setNeedsPassword(false);
+                setTimeout(() => setStatus("decrypting"), 1500);
+                setTimeout(() => setStatus("ready"), 4000);
+            } else {
+                if (json.requiresPassword) {
+                    setNeedsPassword(true);
+                    setStatus("ready"); // Show password UI
                 } else {
                     setError(json.error || "Transfer system offline");
                     setStatus("error");
                 }
-            } catch (err) {
-                setError("Connection failure");
-                setStatus("error");
             }
-        };
+        } catch (err) {
+            setError("Connection failure");
+            setStatus("error");
+        }
+    };
 
+    useEffect(() => {
         if (id) {
             fetchData();
-
-            // Safety Timeout for Dev Demos
-            const timer = setTimeout(() => {
-                setStatus((prev) => {
-                    if (prev === "loading") {
-                        // Force mock data if stuck
-                        setData({
-                            transferId: id,
-                            files: [{ name: "demo-file.txt", size: 1024, type: "text/plain" }],
-                            expiresAt: new Date(Date.now() + 86400000).toISOString()
-                        });
-                        return "ready";
-                    }
-                    return prev;
-                });
-            }, 8000); // 8s timeout
-
-            return () => clearTimeout(timer);
         }
     }, [id]);
+
+    const handleUnlock = () => {
+        setStatus("loading");
+        fetchData(password);
+    };
+
+    const [decryptionKey, setDecryptionKey] = useState<CryptoKey | null>(null);
+
+    useEffect(() => {
+        // Parse key from URL hash
+        const hash = typeof window !== 'undefined' ? window.location.hash : '';
+        if (hash.includes('key=')) {
+            const keyStr = hash.split('key=')[1];
+            importKey(keyStr).then(setDecryptionKey).catch(console.error);
+        }
+    }, []);
+
+    const handleDownload = async (file: TransferData['files'][0]) => {
+        if (!file.url) return;
+
+        // If no IV or no Key, assume unencrypted (Legacy)
+        if (!file.iv || !decryptionKey) {
+            window.open(file.url, '_blank');
+            return;
+        }
+
+        try {
+            // Fetch Encrypted Blob
+            const response = await fetch(file.url);
+            const blob = await response.blob();
+
+            // Decrypt
+            const ivBuffer = base64ToArrayBuffer(file.iv);
+            const decryptedBlob = await decryptFile(blob, decryptionKey, new Uint8Array(ivBuffer));
+
+            // Download
+            const url = URL.createObjectURL(decryptedBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = file.name;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("Decryption failed:", error);
+            alert("Failed to decrypt file. Key might be invalid.");
+        }
+    };
 
     const formatSize = (bytes: number) => {
         if (bytes === 0) return "0 Bytes";
@@ -118,7 +160,34 @@ export function VaultContent({ id }: { id: string }) {
                     </motion.div>
                 )}
 
-                {status === "ready" && data && (
+                {status === "ready" && needsPassword && (
+                    <motion.div
+                        key="password-lock"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="monolith p-20 flex flex-col items-center max-w-xl w-full"
+                    >
+                        <div className="w-20 h-20 bg-black/5 rounded-full flex items-center justify-center mb-8">
+                            <Lock className="w-10 h-10 text-black" />
+                        </div>
+                        <h3 className="text-2xl font-black uppercase tracking-widest text-black mb-8">Password Required</h3>
+                        <input
+                            type="password"
+                            placeholder="ENTER PASSWORD"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full bg-black/[0.03] border border-black/10 rounded-xl px-6 py-4 text-center font-bold tracking-widest focus:outline-none focus:border-black transition-colors mb-8"
+                        />
+                        <button
+                            onClick={handleUnlock}
+                            className="bg-black text-white px-12 py-4 rounded-xl font-black uppercase tracking-widest hover:bg-secure transition-colors"
+                        >
+                            Unlock Vault
+                        </button>
+                    </motion.div>
+                )}
+
+                {status === "ready" && data && !needsPassword && (
                     <motion.div
                         key="ready"
                         initial={{ opacity: 0, scale: 0.95, y: 30 }}
@@ -147,11 +216,9 @@ export function VaultContent({ id }: { id: string }) {
                         <div className="p-12">
                             <div className="space-y-4 mb-12">
                                 {data.files.map((file, i) => (
-                                    <a
+                                    <div
                                         key={i}
-                                        href={(file as any).url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
+                                        onClick={() => handleDownload(file)}
                                         className="flex items-center justify-between p-6 bg-black/[0.03] rounded-3xl border border-black/5 hover:bg-black/[0.05] transition-colors group/file cursor-pointer"
                                     >
                                         <div className="flex items-center gap-5">
@@ -164,17 +231,13 @@ export function VaultContent({ id }: { id: string }) {
                                             </div>
                                         </div>
                                         <Download className="w-5 h-5 text-black/20 group-hover/file:text-secure transition-colors" />
-                                    </a>
+                                    </div>
                                 ))}
                             </div>
 
                             {data.files.length === 1 ? (
                                 <button
-                                    onClick={() => {
-                                        const url = (data.files[0] as any).url;
-                                        if (url) window.location.assign(url);
-                                        else alert("File link not found. Please try re-uploading.");
-                                    }}
+                                    onClick={() => handleDownload(data.files[0])}
                                     className="w-full bg-black text-white py-8 rounded-[2.5rem] font-black text-sm uppercase tracking-[0.5em] shadow-2xl hover:bg-secure transition-all flex items-center justify-center gap-4 group active:scale-95"
                                 >
                                     <Download className="w-5 h-5 group-hover:translate-y-1 transition-transform" />
@@ -183,17 +246,14 @@ export function VaultContent({ id }: { id: string }) {
                             ) : (
                                 <div className="grid gap-4">
                                     <button
-                                        onClick={() => data.files.forEach(f => {
-                                            const url = (f as any).url;
-                                            if (url) window.open(url, '_blank');
-                                        })}
+                                        onClick={() => data.files.forEach(f => handleDownload(f))}
                                         className="w-full bg-black text-white py-6 rounded-[2rem] font-black text-xs uppercase tracking-[0.5em] shadow-xl hover:bg-secure transition-all flex items-center justify-center gap-4 group active:scale-95"
                                     >
                                         <Download className="w-5 h-5" />
-                                        Download All (Popups)
+                                        Download All (Decrypting)
                                     </button>
                                     <p className="text-center text-[10px] text-black/30 font-bold uppercase tracking-widest">
-                                        *Allow popups to download multiple files at once.
+                                        *Decryption happens directly in your browser.
                                     </p>
                                 </div>
                             )}

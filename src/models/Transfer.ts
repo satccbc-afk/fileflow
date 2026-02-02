@@ -9,13 +9,14 @@ const TransferSchema = new Schema({
         key: { type: String }, // S3 Key
         bucket: { type: String }, // S3 Bucket
         externalUrl: { type: String }, // Google Drive / External Link
+        iv: { type: String }, // AES-GCM IV
     }],
     expiresAt: { type: Date, required: true },
+    password: { type: String, select: false }, // Password protection (optional)
     createdAt: { type: Date, default: Date.now },
     ownerEmail: { type: String }, // Link to User
     downloadCount: { type: Number, default: 0 },
     maxDownloads: { type: Number },
-    password: { type: String, select: false }, // Not exposed by default
 });
 
 export const Transfer = models.Transfer || model("Transfer", TransferSchema);

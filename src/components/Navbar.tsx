@@ -11,18 +11,18 @@ export function Navbar({ session }: { session?: any }) {
     <motion.nav
       initial={{ y: -50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="fixed top-0 left-0 w-full z-50 px-6 py-10 flex justify-center"
+      className="fixed top-0 left-0 w-full z-50 px-6 py-6 flex justify-center"
     >
-      <div className="bento-card px-10 py-5 flex items-center justify-between w-full max-w-[1200px] border border-black/5 shadow-2xl">
+      <div className="bento-card px-10 py-4 flex items-center justify-between w-full max-w-[1200px] border border-black/5 shadow-2xl">
         <Link href="/" className="group flex items-center gap-4 min-w-[200px]">
           <div className="w-12 h-12 rounded-2xl bg-share flex items-center justify-center text-white transition-all group-hover:bg-secure group-hover:rotate-[-45deg] shadow-xl">
             <MoveRight className="w-6 h-6" />
           </div>
           <div className="flex flex-col">
-            <span className="text-3xl font-black font-heading tracking-tighter text-share leading-none">Fileflow</span>
+            <span className="text-3xl font-black font-heading tracking-tighter text-share leading-none">MyDrop Transfer</span>
             <div className="flex items-center gap-1.5">
-              <Orbit className="w-3 h-3 text-secure animate-spin-slow" />
-              <span className="text-[9px] font-black uppercase tracking-[0.4em] text-secure">Spatial OS v2.5</span>
+              <Orbit className="w-3 h-3 text-black/20 animate-spin-slow" />
+              <span className="text-[9px] font-black uppercase tracking-[0.4em] text-black/20">Spatial OS v2.5</span>
             </div>
           </div>
         </Link>
@@ -32,7 +32,7 @@ export function Navbar({ session }: { session?: any }) {
             <Link
               key={item}
               href={`/${item.toLowerCase()}`}
-              className="text-share/40 hover:text-share text-[10px] font-black uppercase tracking-[0.4em] transition-all relative group"
+              className="text-black/30 hover:text-black/80 text-[10px] font-black uppercase tracking-[0.4em] transition-all relative group"
             >
               {item}
               <motion.div className="absolute -bottom-1 left-0 w-0 h-px bg-secure transition-all group-hover:w-full" />

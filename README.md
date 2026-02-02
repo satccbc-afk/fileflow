@@ -25,7 +25,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 To learn more about Next.js, take a look at the following resources:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features## Production Deployment 🚀
-To get Fileflow ready for production:
+To get MyDrop ready for production:
 1.  **MongoDB Atlas**: Copy your connection string from MongoDB Atlas.
 2.  **Environment Variables**: Add `MONGODB_URI` and `NEXT_PUBLIC_BASE_URL` to your production environment (Vercel, Netlify, etc.).
 3.  **Build**: Run `npm run build` to generate the optimized multi-page architecture.

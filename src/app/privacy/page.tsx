@@ -9,7 +9,7 @@ export default function PrivacyPage() {
     return (
         <main className="relative min-h-screen text-share font-sans selection:bg-secure/10">
             <div className="content-wrapper">
-                
+
 
                 <section className="container mx-auto px-6 pt-56 pb-40">
                     <div className="max-w-4xl mx-auto">
@@ -49,14 +49,14 @@ export default function PrivacyPage() {
                             <div className="bento-card border-none bg-black text-white p-16">
                                 <h2 className="text-3xl font-black mb-8 uppercase tracking-tighter text-secure">GDPR & CCPA READY</h2>
                                 <p className="text-white/60 font-medium leading-loose">
-                                    Fileflow Systems is fully compliant with global data protection regulations. We don't just follow the law; we set the standard for how data should be treated in the 21st century.
+                                    MyDrop Transfer Systems is fully compliant with global data protection regulations. We don't just follow the law; we set the standard for how data should be treated in the 21st century.
                                 </p>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                
+
             </div>
         </main>
     );
