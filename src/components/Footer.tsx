@@ -9,7 +9,7 @@ export function Footer() {
             <div className="container mx-auto px-6 relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-24 mb-32">
                     <div className="col-span-1 lg:col-span-2">
-                        <h2 className="text-4xl font-black font-heading mb-10 tracking-tighter text-share">FileDash_</h2>
+                        <h2 className="text-4xl font-black font-heading mb-10 tracking-tighter text-share">MyDrop Transfer_</h2>
                         <p className="text-seamless text-xl max-w-sm leading-relaxed mb-12 font-black uppercase tracking-tighter">
                             World class infrastructure for high speed data movement. Secure by design.
                         </p>
@@ -94,7 +94,7 @@ export function Footer() {
                         <span>All Systems Operational</span>
                     </div>
                     <div>
-                        © 2026 FILEDASH SYSTEMS <span className="mx-6">//</span> MATTE_V2.0
+                        © 2026 MYDROP TRANSFER <span className="mx-6">//</span> MATTE_V2.0
                     </div>
                 </div>
             </div>

@@ -13,7 +13,7 @@ export async function POST() {
 
         await dbConnect();
         let user = await User.findOne({ email: session.user.email });
-        console.log("FileDash Checkout Session User:", user?.email);
+        console.log("Stripe Checkout Session User:", user?.email);
 
         if (!user) {
             console.log("User missing from DB. Creating now...");
@@ -38,7 +38,7 @@ export async function POST() {
                     price_data: {
                         currency: "usd",
                         product_data: {
-                            name: "FileDash Pro Plan",
+                            name: "MyDrop Transfer Pro Plan",
                             description: "1TB Storage, Password Protection, and Priority Support",
                         },
                         unit_amount: 1000, // $10.00

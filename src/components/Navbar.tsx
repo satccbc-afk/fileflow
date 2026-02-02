@@ -19,7 +19,7 @@ export function Navbar({ session }: { session?: any }) {
             <MoveRight className="w-6 h-6" />
           </div>
           <div className="flex flex-col">
-            <span className="text-3xl font-black font-heading tracking-tighter text-share leading-none">FileDash</span>
+            <span className="text-3xl font-black font-heading tracking-tighter text-share leading-none">MyDrop Transfer</span>
             <div className="flex items-center gap-1.5">
               <Orbit className="w-3 h-3 text-black/20 animate-spin-slow" />
               <span className="text-[9px] font-black uppercase tracking-[0.4em] text-black/20">Spatial OS v2.5</span>

@@ -30,7 +30,7 @@ export default function Home() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
-            "name": "FileDash",
+            "name": "MyDrop Transfer",
             "applicationCategory": "ProductivityApplication",
             "operatingSystem": "Web",
             "offers": {
@@ -186,7 +186,7 @@ export default function Home() {
         <section className="container mx-auto px-6 py-60 text-center relative">
           <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
             <h2 className="text-[200px] md:text-[400px] font-black text-black/[0.02] tracking-[-0.1em] whitespace-nowrap animate-spatial">
-              FILEDASH SYSTEMS
+              MYDROP TRANSFER SYSTEMS
             </h2>
           </div>
           <div className="relative z-10">

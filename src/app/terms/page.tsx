@@ -27,7 +27,7 @@ export default function TermsPage() {
                         <div className="space-y-12 mt-24">
                             <div className="bento-card">
                                 <h2 className="text-2xl font-black mb-6 uppercase">1. Usage Protocol</h2>
-                                <p className="text-seamless font-bold leading-relaxed">By accessing FileDash, you agree to engage with the system as a professional creator. The use of the platform for distributing malicious code or illegal content is prohibited and will result in immediate identity revocation.</p>
+                                <p className="text-seamless font-bold leading-relaxed">By accessing MyDrop Transfer, you agree to engage with the system as a professional creator. The use of the platform for distributing malicious code or illegal content is prohibited and will result in immediate identity revocation.</p>
                             </div>
 
                             <div className="bento-card">
@@ -37,7 +37,7 @@ export default function TermsPage() {
 
                             <div className="bento-card">
                                 <h2 className="text-2xl font-black mb-6 uppercase">3. Data Stewardship</h2>
-                                <p className="text-seamless font-bold leading-relaxed">You retain full ownership of all data pushed through our pipes. FileDash Systems acts only as the neutral transmission layer. We do not index, search, or backup your files beyond the specified expiry period.</p>
+                                <p className="text-seamless font-bold leading-relaxed">You retain full ownership of all data pushed through our pipes. MyDrop Transfer Systems acts only as the neutral transmission layer. We do not index, search, or backup your files beyond the specified expiry period.</p>
                             </div>
                         </div>
                     </div>

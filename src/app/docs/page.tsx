@@ -9,7 +9,7 @@ const articles = [
     { title: "Getting Started", desc: "Learn how to send your first file in seconds." },
     { title: "Pro Accounts", desc: "Unlock massive transmission pipes and branding." },
     { title: "Security Guide", desc: "Understand how our zero-knowledge system works." },
-    { title: "API Reference", desc: "Technical details for integrating FileDash." },
+    { title: "API Reference", desc: "Technical details for integrating MyDrop Transfer." },
 ];
 
 export default function DocsPage() {
