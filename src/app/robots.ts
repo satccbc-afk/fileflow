@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
             allow: '/',
             disallow: ['/admin/', '/api/', '/dashboard/'],
         },
-        sitemap: 'https://mydrop.transfer/sitemap.xml',
+        sitemap: 'https://mydroptransfer.vercel.app/sitemap.xml',
     }
 }

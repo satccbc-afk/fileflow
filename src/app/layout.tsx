@@ -19,7 +19,7 @@ const inter = Inter({
 });
 
 export const metadata = {
-  metadataBase: new URL('https://fileflow-one.vercel.app'),
+  metadataBase: new URL('https://mydroptransfer.vercel.app'),
   alternates: {
     canonical: '/',
   },
@@ -43,7 +43,7 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://mydrop.transfer",
+    url: "https://mydroptransfer.vercel.app",
     title: "MyDrop Transfer | Send 100GB for Free",
     description: "Share files up to 100GB for free. End-to-end encrypted, password protected, and lightning fast. No account required.",
     siteName: "MyDrop Transfer",
