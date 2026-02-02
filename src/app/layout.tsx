@@ -19,16 +19,16 @@ const inter = Inter({
 });
 
 export const metadata = {
-  metadataBase: new URL('https://mydroptransfer.vercel.app'),
+  metadataBase: new URL('https://filedash.vercel.app'),
   alternates: {
     canonical: '/',
   },
-  title: "MyDrop Transfer | The Best Free Data Transfer Alternative",
-  description: "Share files up to 100GB for free. End-to-end encrypted, password protected, and lightning fast. No account required.",
-  keywords: ["file sharing", "wetransfer alternative", "send large files", "free file upload", "100GB free", "secure transfer", "MyDrop Transfer", "encrypted sharing"],
-  authors: [{ name: "MyDrop Transfer" }],
-  creator: "MyDrop Transfer",
-  publisher: "MyDrop Transfer",
+  title: "FileDash | The Fastest Way to Share Large Files",
+  description: "Share files up to 100GB in seconds. Encrypted, free, and designed for speed. The ultimate WeTransfer alternative.",
+  keywords: ["file sharing", "fast file transfer", "send large files", "free file upload", "100GB free", "secure transfer", "FileDash", "encrypted sharing"],
+  authors: [{ name: "FileDash Systems" }],
+  creator: "FileDash",
+  publisher: "FileDash",
   robots: {
     index: true,
     follow: true,
@@ -43,22 +43,22 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://mydroptransfer.vercel.app",
-    title: "MyDrop Transfer | Send 100GB for Free",
-    description: "Share files up to 100GB for free. End-to-end encrypted, password protected, and lightning fast. No account required.",
-    siteName: "MyDrop Transfer",
+    url: "https://filedash.vercel.app",
+    title: "FileDash | Send 100GB for Free",
+    description: "Share files up to 100GB in seconds. Encrypted, free, and designed for speed.",
+    siteName: "FileDash",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: 'MyDrop Transfer Preview',
+        alt: 'FileDash Preview',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: "MyDrop Transfer | Send 100GB for Free",
+    title: "FileDash | Send 100GB for Free",
     description: "The modern WeTransfer alternative. Encrypted. Fast. Beautiful.",
     // images: ['/og-image.png'],
   },

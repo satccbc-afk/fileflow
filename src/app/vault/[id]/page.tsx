@@ -6,7 +6,7 @@ import { Metadata } from "next";
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const { id } = await params;
     return {
-        title: `MyDrop Transfer | Secure Vault ${id}`,
+        title: `FileDash | Secure Vault ${id}`,
         description: "Access your secure cloud transmission through our decentralized mesh network.",
     };
 }

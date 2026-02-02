@@ -38,7 +38,7 @@ export default function AboutPage() {
                         >
                             <h2 className="text-4xl font-black mb-8 underline decoration-secure decoration-8 underline-offset-[10px]">The Original Idea</h2>
                             <p className="text-lg text-seamless font-bold leading-relaxed">
-                                MyDrop Transfer started as a simple question: "Why is moving large files so painful?" <br /><br />
+                                FileDash started as a simple question: "Why is moving large files so painful?" <br /><br />
                                 Legacy platforms are cluttered with ads, slow speeds, and intrusive tracking. We wanted to build a portal that was as invisible as it was powerful. A place where data moves at the speed of thought.
                             </p>
                         </motion.div>

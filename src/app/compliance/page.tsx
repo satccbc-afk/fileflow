@@ -30,7 +30,7 @@ export default function CompliancePage() {
                                 <ShieldCheck className="w-10 h-10 text-secure mb-6" />
                                 <h2 className="text-3xl font-black mb-6 uppercase tracking-tighter text-black">Industry Certifications</h2>
                                 <p className="text-black/40 font-bold leading-relaxed text-lg">
-                                    MyDrop Transfer Systems undergoes rigorous third-party audits annually to maintain our SOC 2 Type II and ISO 27001 certifications. We ensure that our internal protocols exceed global enterprise security standards.
+                                    FileDash Systems undergoes rigorous third-party audits annually to maintain our SOC 2 Type II and ISO 27001 certifications. We ensure that our internal protocols exceed global enterprise security standards.
                                 </p>
                             </div>
 
@@ -48,7 +48,7 @@ export default function CompliancePage() {
                             <div className="bento-card border-none bg-black text-white p-16">
                                 <h2 className="text-3xl font-black mb-4 uppercase tracking-tighter text-secure">Zero-Liability Infrastructure</h2>
                                 <p className="text-white/40 font-medium leading-relaxed">
-                                    Our dedicated DPO ensures that MyDrop Transfer adheres to the highest standards of data security and regulatory compliance every single day.structure is legally and technically designed to protect your privacy at all costs.
+                                    Our dedicated DPO ensures that FileDash adheres to the highest standards of data security and regulatory compliance every single day.structure is legally and technically designed to protect your privacy at all costs.
                                 </p>
                             </div>
                         </div>

@@ -41,7 +41,7 @@ export default function ContactPage() {
                                 <Twitter className="w-8 h-8 text-secure mb-6" />
                                 <h3 className="text-xl font-black uppercase text-black mb-2">Live Pulse</h3>
                                 <p className="text-black/40 font-bold mb-6">Get the latest network updates and technical news.</p>
-                                <p className="text-lg font-black text-black">@mydrop_hq</p>
+                                <p className="text-lg font-black text-black">@filedash_hq</p>
                             </div>
                         </div>
 
