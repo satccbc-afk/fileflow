@@ -51,7 +51,7 @@ export default function Home() {
 
 
         {/* HERO SECTION: SPATIAL SPLIT */}
-        <section className="container mx-auto px-6 pt-52 pb-32 min-h-screen flex flex-col lg:flex-row items-center gap-16">
+        <section className="w-full max-w-[1200px] mx-auto px-6 pt-40 pb-32 min-h-screen flex flex-col lg:flex-row items-center gap-16">
           <div className="flex-1 text-left">
             <motion.div
               initial={{ x: -20, opacity: 0 }}
