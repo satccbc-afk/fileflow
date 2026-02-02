@@ -51,8 +51,8 @@ export default function Home() {
 
 
         {/* HERO SECTION: SPATIAL SPLIT */}
-        <section className="w-full max-w-[1200px] mx-auto px-6 pt-32 pb-20 min-h-screen grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
-          <div className="text-left z-10">
+        <section className="w-full max-w-[1280px] mx-auto px-6 pt-52 pb-32 min-h-screen grid grid-cols-1 lg:grid-cols-2 items-start gap-12 lg:gap-20">
+          <div className="text-left z-10 pt-10">
             <motion.div
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -61,7 +61,7 @@ export default function Home() {
               Quantum Systems v2.5
             </motion.div>
 
-            <h1 className="text-[60px] md:text-[100px] font-semibold tracking-[-0.08em] leading-[0.9] mb-12">
+            <h1 className="text-[70px] md:text-[110px] font-semibold tracking-[-0.08em] leading-[0.9] mb-12">
               <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6 }} className="text-neutral-700">
                 Share.
               </motion.div>
@@ -105,7 +105,7 @@ export default function Home() {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-md mx-auto lg:ml-auto animate-spatial z-20"
+            className="w-full max-w-md mx-auto lg:ml-auto animate-spatial z-20 mt-12 lg:mt-24"
           >
             <UploadZone />
           </motion.div>
