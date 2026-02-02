@@ -155,6 +155,9 @@ export function UploadZone() {
 
     return (
         <div className="w-full max-w-2xl mx-auto">
+            {/* Always render the input so 'open' works even when visual dropzone is hidden */}
+            <input {...getInputProps()} />
+
             <AnimatePresence mode="wait">
                 {status === "idle" && files.length === 0 && (
                     <motion.div
@@ -174,7 +177,6 @@ export function UploadZone() {
                                     : "hover:bg-white hover:shadow-[0_40px_100px_-30px_rgba(0,0,0,0.2)] hover:border-black/20"
                             )}
                         >
-                            <input {...getInputProps()} />
                             <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat" />
                             <div className="relative z-10 border-2 border-dashed border-black/10 rounded-[2.5rem] p-10 bg-white/40 flex flex-col items-center w-full max-w-sm transition-colors duration-300 group-hover:border-black/20">
                                 <motion.div
