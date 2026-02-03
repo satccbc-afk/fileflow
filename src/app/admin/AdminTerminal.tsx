@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Trash2, Loader2, ShieldCheck, User, HardDrive, FileText, Ban, CheckCircle } from "lucide-react";
+import { Trash2, Loader2, ShieldCheck, User, HardDrive, FileText, Ban, CheckCircle, BarChart3, Users, Folder, ChevronRight, Eye } from "lucide-react";
 
 interface AdminTerminalProps {
     className?: string;
@@ -14,6 +14,7 @@ export function AdminTerminal({ className }: AdminTerminalProps) {
     const [transfers, setTransfers] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isDeleting, setIsDeleting] = useState<string | null>(null);
+    const [selectedUser, setSelectedUser] = useState<any>(null);
 
     // Search & Filter State
     const [search, setSearch] = useState("");
@@ -114,23 +115,26 @@ export function AdminTerminal({ className }: AdminTerminalProps) {
 
     return (
         <div className={`monolith p-8 bg-white border border-black/5 rounded-[2rem] shadow-2xl min-h-[600px] ${className}`}>
-            <div className="flex flex-wrap items-center gap-4 mb-8 border-b border-black/5 pb-6">
+            <div className="flex flex-wrap items-center gap-4 mb-10 border-b border-black/5 pb-8">
                 <button
                     onClick={() => setActiveTab('overview')}
-                    className={`px-6 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${activeTab === 'overview' ? 'bg-black text-white shadow-xl' : 'text-black/40 hover:text-black hover:bg-black/5'}`}
+                    className={`flex items-center gap-3 px-8 py-4 rounded-2xl text-[12px] font-black uppercase tracking-widest transition-all ${activeTab === 'overview' ? 'bg-black text-white shadow-2xl scale-105' : 'bg-black/5 text-black/50 hover:bg-black/10 hover:text-black'}`}
                 >
+                    <BarChart3 className="w-4 h-4" />
                     Overview
                 </button>
                 <button
                     onClick={() => setActiveTab('users')}
-                    className={`px-6 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${activeTab === 'users' ? 'bg-black text-white shadow-xl' : 'text-black/40 hover:text-black hover:bg-black/5'}`}
+                    className={`flex items-center gap-3 px-8 py-4 rounded-2xl text-[12px] font-black uppercase tracking-widest transition-all ${activeTab === 'users' ? 'bg-black text-white shadow-2xl scale-105' : 'bg-black/5 text-black/50 hover:bg-black/10 hover:text-black'}`}
                 >
+                    <Users className="w-4 h-4" />
                     Users
                 </button>
                 <button
                     onClick={() => setActiveTab('files')}
-                    className={`px-6 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${activeTab === 'files' ? 'bg-black text-white shadow-xl' : 'text-black/40 hover:text-black hover:bg-black/5'}`}
+                    className={`flex items-center gap-3 px-8 py-4 rounded-2xl text-[12px] font-black uppercase tracking-widest transition-all ${activeTab === 'files' ? 'bg-black text-white shadow-2xl scale-105' : 'bg-black/5 text-black/50 hover:bg-black/10 hover:text-black'}`}
                 >
+                    <Folder className="w-4 h-4" />
                     Files
                 </button>
             </div>
@@ -246,12 +250,21 @@ export function AdminTerminal({ className }: AdminTerminalProps) {
                                                     )}
                                                 </td>
                                                 <td className="p-4 text-right">
-                                                    <button
-                                                        onClick={() => toggleBlockUser(user._id, user.isBlocked)}
-                                                        className={`px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all ${user.isBlocked ? 'bg-black text-white hover:bg-green-600' : 'bg-red-50 text-red-600 hover:bg-red-100'}`}
-                                                    >
-                                                        {user.isBlocked ? 'Unblock' : 'Block'}
-                                                    </button>
+                                                    <div className="flex items-center justify-end gap-2">
+                                                        <button
+                                                            onClick={() => setSelectedUser(user)}
+                                                            className="p-2 rounded-xl bg-black/5 hover:bg-black/10 transition-all text-black/40 hover:text-black"
+                                                            title="View Details"
+                                                        >
+                                                            <Eye className="w-4 h-4" />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => toggleBlockUser(user._id, user.isBlocked)}
+                                                            className={`px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all ${user.isBlocked ? 'bg-black text-white hover:bg-green-600' : 'bg-red-50 text-red-600 hover:bg-red-100'}`}
+                                                        >
+                                                            {user.isBlocked ? 'Unblock' : 'Block'}
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         ))}
@@ -326,6 +339,57 @@ export function AdminTerminal({ className }: AdminTerminalProps) {
                             )}
                         </div>
                     )}
+                </div>
+            )}
+
+            {/* User Details Modal (Simple Implementation) */}
+            {selectedUser && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/20 backdrop-blur-sm">
+                    <div className="w-full max-w-2xl bg-white rounded-[2.5rem] shadow-2xl border border-black/5 overflow-hidden animate-in zoom-in-95 duration-200">
+                        <div className="p-10 border-b border-black/5 flex justify-between items-start bg-black/5">
+                            <div className="flex items-center gap-6">
+                                <div className="w-20 h-20 rounded-3xl bg-black text-white flex items-center justify-center shadow-xl">
+                                    <User className="w-10 h-10" />
+                                </div>
+                                <div>
+                                    <h2 className="text-3xl font-black tracking-tighter mb-1">{selectedUser.name}</h2>
+                                    <p className="text-sm font-bold text-black/40 uppercase tracking-widest">{selectedUser.plan} Member</p>
+                                </div>
+                            </div>
+                            <button onClick={() => setSelectedUser(null)} className="p-3 rounded-2xl hover:bg-black/5 transition-colors">
+                                <Trash2 className="w-6 h-6 text-black/20" />
+                            </button>
+                        </div>
+                        <div className="p-10 grid grid-cols-2 gap-8">
+                            <div>
+                                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-black/20 mb-4">Contact Info</h3>
+                                <p className="font-bold text-lg mb-1">{selectedUser.email}</p>
+                                <p className="text-xs font-mono text-black/40 leading-none capitalize">Provider: {selectedUser.provider || 'Email'}</p>
+                            </div>
+                            <div>
+                                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-black/20 mb-4">Storage Usage</h3>
+                                <p className="font-bold text-lg mb-1">{formatBytes(selectedUser.storageUsed)}</p>
+                                <p className="text-xs font-mono text-black/40 leading-none">Registered on {new Date(selectedUser.createdAt).toLocaleDateString()}</p>
+                            </div>
+                            <div className="col-span-2 pt-4 border-t border-black/5">
+                                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-black/20 mb-6">Administrative Control</h3>
+                                <div className="flex gap-4">
+                                    <button
+                                        onClick={() => {
+                                            toggleBlockUser(selectedUser._id, selectedUser.isBlocked);
+                                            setSelectedUser(null);
+                                        }}
+                                        className={`flex-1 py-5 rounded-2xl font-black uppercase tracking-widest text-xs transition-all ${selectedUser.isBlocked ? 'bg-green-600 text-white' : 'bg-red-500 text-white'}`}
+                                    >
+                                        {selectedUser.isBlocked ? 'Unlock Account' : 'Suspend Account'}
+                                    </button>
+                                    <button className="flex-1 py-5 rounded-2xl border-2 border-black/5 bg-white font-black uppercase tracking-widest text-xs hover:border-black transition-all">
+                                        Support Request
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

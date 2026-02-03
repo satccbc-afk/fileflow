@@ -18,5 +18,11 @@ export default async function AdminPage() {
     // Pre-fetch initial count on the server (Optional, but good for SEO/Performance)
     const initialTransfersCount = await Transfer.countDocuments({});
 
-    return <AdminTerminal />;
+    return (
+        <main className="min-h-screen pt-40 pb-20 bg-page">
+            <div className="content-wrapper">
+                <AdminTerminal />
+            </div>
+        </main>
+    );
 }
