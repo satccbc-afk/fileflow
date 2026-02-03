@@ -45,10 +45,20 @@ export async function POST(req: Request) {
         });
 
     } catch (error: any) {
-        console.error("[RAZORPAY_ORDER_ERROR]", error);
+        console.error("[RAZORPAY_ORDER_ERROR]:", error);
+
+        // Detailed error reporting for debugging
+        const errorMessage = error.message || "Unknown Razorpay error";
+        const errorDetails = error.description || (error.error ? error.error.description : null);
+
         return NextResponse.json(
-            { error: error.message || "Failed to create Razorpay order" },
+            {
+                error: errorMessage,
+                details: errorDetails,
+                code: error.code || "RAZORPAY_FAILURE"
+            },
             { status: 500 }
         );
     }
 }
+

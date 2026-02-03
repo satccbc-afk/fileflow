@@ -56,7 +56,10 @@ export function UpgradeButton() {
             });
 
             const order = await orderRes.json();
-            if (order.error) throw new Error(order.error);
+            if (order.error) {
+                console.error("Order Error Details:", order.details);
+                throw new Error(`${order.error} ${order.details ? `: ${order.details}` : ''}`);
+            }
 
             const options = {
                 key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
