@@ -94,7 +94,7 @@ export function Footer() {
                         <span>All Systems Operational</span>
                     </div>
                     <div>
-                        © 2026 MYDROP TRANSFER <span className="mx-2 md:mx-6 block md:inline my-2 md:my-0">//</span> MATTE_V2.0
+                        © 2026 MYDROP TRANSFER <span className="mx-2 md:mx-6 block md:inline my-2 md:my-0">//</span> Designed by Khushboo Mishra
                     </div>
                 </div>
             </div>

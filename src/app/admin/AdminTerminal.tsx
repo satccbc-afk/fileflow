@@ -15,25 +15,47 @@ export function AdminTerminal({ className }: AdminTerminalProps) {
     const [isLoading, setIsLoading] = useState(true);
     const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
+    // Search & Filter State
+    const [search, setSearch] = useState("");
+    const [planFilter, setPlanFilter] = useState("all");
+    const [statusFilter, setStatusFilter] = useState("all");
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalUsers, setTotalUsers] = useState(0);
+
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [activeTab, search, planFilter, statusFilter, page]); // Refetch when filters change
 
     const fetchData = async () => {
         setIsLoading(true);
         try {
-            const [usersRes, transfersRes] = await Promise.all([
-                fetch('/api/admin/users'),
-                fetch('/api/admin/transfers')
-            ]);
+            if (activeTab === 'users' || activeTab === 'overview') {
+                const query = new URLSearchParams({
+                    search,
+                    plan: planFilter,
+                    status: statusFilter,
+                    page: page.toString(),
+                    limit: '10'
+                });
+                const usersRes = await fetch(`/api/admin/users?${query}`);
+                const usersData = await usersRes.json();
+                if (usersData.success) {
+                    setUsers(usersData.users);
+                    if (usersData.pagination) {
+                        setTotalPages(usersData.pagination.totalPages);
+                        setTotalUsers(usersData.pagination.total);
+                    }
+                }
+            }
 
-            const usersData = await usersRes.json();
-            const transfersData = await transfersRes.json();
-
-            if (usersData.success) setUsers(usersData.users);
-            if (transfersData.success) {
-                setTransfers(transfersData.transfers);
-                setStats(transfersData.stats);
+            if (activeTab === 'files' || activeTab === 'overview') {
+                const transfersRes = await fetch('/api/admin/transfers');
+                const transfersData = await transfersRes.json();
+                if (transfersData.success) {
+                    setTransfers(transfersData.transfers);
+                    setStats(transfersData.stats);
+                }
             }
 
         } catch (error) {
@@ -134,55 +156,129 @@ export function AdminTerminal({ className }: AdminTerminalProps) {
                             </div>
                             <div className="p-8 bg-black/5 rounded-3xl border border-black/5 flex flex-col items-center justify-center text-center">
                                 <User className="w-8 h-8 opacity-20 mb-4" />
-                                <h3 className="text-4xl font-black mb-1">{users.length}</h3>
-                                <p className="text-[10px] font-bold uppercase tracking-widest text-black/40">Active Users</p>
+                                <h3 className="text-4xl font-black mb-1">{totalUsers}</h3>
+                                <p className="text-[10px] font-bold uppercase tracking-widest text-black/40">Total Active Users</p>
                             </div>
                         </div>
                     )}
 
                     {/* USERS TAB */}
                     {activeTab === 'users' && (
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-left border-collapse">
-                                <thead>
-                                    <tr className="border-b-2 border-black/5">
-                                        <th className="pb-4 text-[10px] font-black uppercase tracking-widest text-black/30 p-4">User</th>
-                                        <th className="pb-4 text-[10px] font-black uppercase tracking-widest text-black/30 p-4">Email</th>
-                                        <th className="pb-4 text-[10px] font-black uppercase tracking-widest text-black/30 p-4">Plan / Usage</th>
-                                        <th className="pb-4 text-[10px] font-black uppercase tracking-widest text-black/30 p-4">Status</th>
-                                        <th className="pb-4 text-[10px] font-black uppercase tracking-widest text-black/30 text-right p-4">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="text-sm">
-                                    {users.map((user) => (
-                                        <tr key={user._id} className="border-b border-black/5 group hover:bg-black/[0.02]">
-                                            <td className="p-4 font-bold">{user.name}</td>
-                                            <td className="p-4 text-black/60 font-mono text-xs">{user.email}</td>
-                                            <td className="p-4">
-                                                <div className="flex flex-col">
-                                                    <span className="px-2 py-0.5 bg-black/5 rounded w-fit text-[10px] font-bold uppercase tracking-wider mb-1">{user.plan}</span>
-                                                    <span className="text-[10px] text-black/40 font-mono">{formatBytes(user.storageUsed)}</span>
-                                                </div>
-                                            </td>
-                                            <td className="p-4">
-                                                {user.isBlocked ? (
-                                                    <span className="text-red-500 font-bold flex items-center gap-1 text-xs"><Ban className="w-3 h-3" /> Blocked</span>
-                                                ) : (
-                                                    <span className="text-green-600 font-bold flex items-center gap-1 text-xs"><CheckCircle className="w-3 h-3" /> Active</span>
-                                                )}
-                                            </td>
-                                            <td className="p-4 text-right">
-                                                <button
-                                                    onClick={() => toggleBlockUser(user._id, user.isBlocked)}
-                                                    className={`px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all ${user.isBlocked ? 'bg-black text-white hover:bg-green-600' : 'bg-red-50 text-red-600 hover:bg-red-100'}`}
-                                                >
-                                                    {user.isBlocked ? 'Unblock' : 'Block'}
-                                                </button>
-                                            </td>
+                        <div className="space-y-6">
+                            {/* Controls */}
+                            <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-black/5 p-4 rounded-2xl">
+                                <div className="flex items-center gap-4 w-full md:w-auto">
+                                    <input
+                                        type="text"
+                                        placeholder="Search by name or email..."
+                                        value={search}
+                                        onChange={(e) => setSearch(e.target.value)}
+                                        className="bg-white border-none rounded-xl px-4 py-2 text-sm font-medium w-full md:w-64 focus:ring-2 focus:ring-black/10 outline-none"
+                                    />
+                                </div>
+                                <div className="flex items-center gap-3 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
+                                    <select
+                                        value={planFilter}
+                                        onChange={(e) => setPlanFilter(e.target.value)}
+                                        className="bg-white border-none rounded-xl px-4 py-2 text-xs font-bold uppercase tracking-wider focus:ring-2 focus:ring-black/10 outline-none cursor-pointer"
+                                    >
+                                        <option value="all">Check Plan</option>
+                                        <option value="free">Free</option>
+                                        <option value="pro">Pro</option>
+                                        <option value="team">Team</option>
+                                    </select>
+                                    <select
+                                        value={statusFilter}
+                                        onChange={(e) => setStatusFilter(e.target.value)}
+                                        className="bg-white border-none rounded-xl px-4 py-2 text-xs font-bold uppercase tracking-wider focus:ring-2 focus:ring-black/10 outline-none cursor-pointer"
+                                    >
+                                        <option value="all">Status</option>
+                                        <option value="active">Active</option>
+                                        <option value="blocked">Blocked</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="overflow-x-auto rounded-2xl border border-black/5">
+                                <table className="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr className="border-b-2 border-black/5">
+                                            <th className="pb-4 text-[10px] font-black uppercase tracking-widest text-black/30 p-4">User</th>
+                                            <th className="pb-4 text-[10px] font-black uppercase tracking-widest text-black/30 p-4">Provider</th>
+                                            <th className="pb-4 text-[10px] font-black uppercase tracking-widest text-black/30 p-4">Plan / Usage</th>
+                                            <th className="pb-4 text-[10px] font-black uppercase tracking-widest text-black/30 p-4">Joined</th>
+                                            <th className="pb-4 text-[10px] font-black uppercase tracking-widest text-black/30 p-4">Status</th>
+                                            <th className="pb-4 text-[10px] font-black uppercase tracking-widest text-black/30 text-right p-4">Action</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody className="text-sm">
+                                        {users.length === 0 ? (
+                                            <tr>
+                                                <td colSpan={6} className="p-20 text-center text-black/20 font-bold italic">No users found matching criteria.</td>
+                                            </tr>
+                                        ) : users.map((user) => (
+                                            <tr key={user._id} className="border-b border-black/5 group hover:bg-black/[0.03] transition-colors">
+                                                <td className="p-4">
+                                                    <div>
+                                                        <div className="font-bold">{user.name}</div>
+                                                        <div className="text-black/60 font-mono text-xs">{user.email}</div>
+                                                    </div>
+                                                </td>
+                                                <td className="p-4">
+                                                    <span className="bg-black/5 px-2 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider text-black/50">
+                                                        {user.provider || 'Email'}
+                                                    </span>
+                                                </td>
+                                                <td className="p-4">
+                                                    <div className="flex flex-col">
+                                                        <span className={`px-2 py-0.5 rounded w-fit text-[10px] font-bold uppercase tracking-wider mb-1 ${user.plan === 'pro' ? 'bg-indigo-100 text-indigo-600' : 'bg-black/5'}`}>{user.plan}</span>
+                                                        <span className="text-[10px] text-black/40 font-mono">{formatBytes(user.storageUsed)}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="p-4 text-xs font-mono text-black/50">
+                                                    {new Date(user.createdAt).toLocaleDateString()}
+                                                </td>
+                                                <td className="p-4">
+                                                    {user.isBlocked ? (
+                                                        <span className="text-red-500 font-bold flex items-center gap-1 text-xs"><Ban className="w-3 h-3" /> Blocked</span>
+                                                    ) : (
+                                                        <span className="text-green-600 font-bold flex items-center gap-1 text-xs"><CheckCircle className="w-3 h-3" /> Active</span>
+                                                    )}
+                                                </td>
+                                                <td className="p-4 text-right">
+                                                    <button
+                                                        onClick={() => toggleBlockUser(user._id, user.isBlocked)}
+                                                        className={`px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all ${user.isBlocked ? 'bg-black text-white hover:bg-green-600' : 'bg-red-50 text-red-600 hover:bg-red-100'}`}
+                                                    >
+                                                        {user.isBlocked ? 'Unblock' : 'Block'}
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* Pagination */}
+                            <div className="flex justify-between items-center pt-4 border-t border-black/5">
+                                <span className="text-xs font-bold text-black/40">Page {page} of {totalPages}</span>
+                                <div className="flex gap-2">
+                                    <button
+                                        disabled={page === 1}
+                                        onClick={() => setPage(p => p - 1)}
+                                        className="px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-xl bg-black/5 hover:bg-black/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        Prev
+                                    </button>
+                                    <button
+                                        disabled={page === totalPages}
+                                        onClick={() => setPage(p => p + 1)}
+                                        className="px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-xl bg-black text-white hover:bg-black/80 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        Next
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     )}
 

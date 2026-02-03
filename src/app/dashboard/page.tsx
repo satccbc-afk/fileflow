@@ -7,6 +7,7 @@ import { Transfer } from "@/models/Transfer";
 import Link from "next/link";
 import { File, Clock, ExternalLink, ShieldCheck, Plus, Layers } from "lucide-react";
 import { DeleteTransferButton } from "@/components/DeleteTransferButton";
+import { TransferList } from "@/components/TransferList";
 
 export default async function DashboardPage() {
     const session = await auth();
@@ -57,6 +58,32 @@ export default async function DashboardPage() {
                     </div>
                 </div>
 
+                <div className="mb-12">
+                    {/* Storage Meter */}
+                    <div className="bg-white p-8 rounded-[2rem] border border-black/5 shadow-md mb-8 flex flex-col md:flex-row items-center gap-6">
+                        <div className="w-16 h-16 bg-black/5 rounded-2xl flex items-center justify-center">
+                            <Layers className="w-8 h-8 text-black/20" />
+                        </div>
+                        <div className="flex-1 w-full">
+                            <div className="flex justify-between items-end mb-2">
+                                <span className="text-[11px] font-black uppercase tracking-widest text-black/40">Storage Used</span>
+                                <span className="text-sm font-bold">
+                                    {(user.storageUsed / (1024 * 1024)).toFixed(2)} MB <span className="text-black/30">/ {user.plan === 'pro' ? '1 TB' : '2 GB'}</span>
+                                </span>
+                            </div>
+                            <div className="w-full h-3 bg-black/5 rounded-full overflow-hidden">
+                                <div
+                                    className="h-full bg-black rounded-full transition-all duration-1000 ease-out"
+                                    style={{ width: `${Math.min((user.storageUsed / (user.plan === 'pro' ? 1024 * 1024 * 1024 * 1024 : 2 * 1024 * 1024 * 1024)) * 100, 100)}%` }}
+                                />
+                            </div>
+                        </div>
+                        <Link href="/settings" className="px-6 py-3 bg-black/5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-black hover:text-white transition-colors">
+                            Manage Account
+                        </Link>
+                    </div>
+                </div>
+
                 {transfers.length === 0 ? (
                     <div className="monolith p-24 text-center flex flex-col items-center bg-white border border-black/5 rounded-[3rem] shadow-xl">
                         <div className="w-24 h-24 bg-black/5 rounded-[2.5rem] flex items-center justify-center mb-8 border border-black/5 shadow-inner">
@@ -69,52 +96,7 @@ export default async function DashboardPage() {
                         </Link>
                     </div>
                 ) : (
-                    <div className="grid gap-8">
-                        {transfers.map((t) => (
-                            <div key={t._id} className="group bg-white p-10 rounded-[3rem] border border-black/5 shadow-xl hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] transition-all flex flex-col md:flex-row items-center justify-between gap-10 border-l-[12px] border-l-black hover:border-l-secure">
-                                <div className="flex items-center gap-8 w-full md:w-auto">
-                                    <div className="w-16 h-16 bg-share/5 rounded-[2rem] flex items-center justify-center text-share group-hover:bg-secure/10 group-hover:text-secure transition-colors shadow-inner">
-                                        <File className="w-8 h-8" />
-                                    </div>
-                                    <div className="min-w-0">
-                                        <h3 className="text-xl font-black text-black mb-1 truncate max-w-[200px] md:max-w-md">
-                                            {t.files[0]?.name} {t.files.length > 1 && <span className="text-black/20 text-sm ml-2">+{t.files.length - 1}</span>}
-                                        </h3>
-                                        <div className="flex items-center gap-5 text-[10px] font-black uppercase tracking-[0.2em] text-black/30">
-                                            <span className="flex items-center gap-1.5"><Clock className="w-3 h-3" /> Expires: {new Date(t.expiresAt).toLocaleDateString()}</span>
-                                            <span className="flex items-center gap-1.5 text-secure"><ShieldCheck className="w-3.5 h-3.5" /> {t.downloadCount || 0} Downloads</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center gap-4">
-                                    <DeleteTransferButton transferId={t.transferId} />
-                                    <button
-                                        onClick={() => {
-                                            navigator.clipboard.writeText(`${window.location.origin}/vault/${t.transferId}`);
-                                            alert("Link copied!");
-                                        }}
-                                        className="text-[10px] font-black uppercase tracking-widest text-black/40 hover:text-black transition-colors"
-                                    >
-                                        Copy Link
-                                    </button>
-                                </div>
-                                <div className="flex flex-col items-end mr-4">
-                                    <span className="text-[9px] font-black uppercase tracking-widest text-black/20 mb-1">Vault Key</span>
-                                    <code className="text-[11px] font-mono text-black/60 bg-black/5 px-3 py-1 rounded-lg">
-                                        {t.transferId}
-                                    </code>
-                                </div>
-                                <Link
-                                    href={`/vault/${t.transferId}`}
-                                    className="w-16 h-16 rounded-[2rem] bg-black text-white flex items-center justify-center hover:bg-secure transition-all shadow-xl hover:-rotate-6 active:scale-95"
-                                    title="Enter Vault"
-                                >
-                                    <ExternalLink className="w-7 h-7" />
-                                </Link>
-                            </div>
-                        ))}
-                    </div>
+                    <TransferList initialTransfers={JSON.parse(JSON.stringify(transfers))} />
                 )}
 
                 <div className="mt-20 text-center">

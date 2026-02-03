@@ -28,7 +28,7 @@ export function Navbar({ session }: { session?: any }) {
         </Link>
 
         <div className="hidden lg:flex items-center gap-10 min-w-[300px] justify-center">
-          {['Features', 'Security', 'Pricing'].map((item) => (
+          {['Features', 'Security', 'Pricing', 'API'].map((item) => (
             <Link
               key={item}
               href={`/${item.toLowerCase()}`}

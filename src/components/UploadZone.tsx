@@ -139,14 +139,14 @@ export function UploadZone() {
                             {...getRootProps()}
                             className={cn(
                                 "w-full p-12 rounded-[2.5rem] flex flex-col items-center justify-center cursor-pointer relative overflow-hidden transition-all duration-500",
-                                "bg-white/80 backdrop-blur-3xl border border-white/40 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)]", // Refined glassmorphism
+                                "bg-[#F5F5F7] backdrop-blur-3xl border border-black/5 shadow-[0_30px_100px_-20px_rgba(0,0,0,0.3)]", // Solid gray background
                                 isDragActive
-                                    ? "bg-red-50/80 border-red-500/30 scale-[1.02] shadow-red-500/10"
-                                    : "hover:bg-white/90 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.15)] hover:border-white/60"
+                                    ? "bg-red-50/80 border-red-500/30 scale-[1.02] shadow-red-500/20"
+                                    : "hover:bg-[#F2F2F4] hover:shadow-[0_50px_120px_-30px_rgba(0,0,0,0.4)] hover:border-white/60"
                             )}
                         >
                             <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat" />
-                            <div className="relative z-10 border-2 border-dashed border-black/10 rounded-[2.5rem] p-10 bg-white/40 flex flex-col items-center w-full max-w-sm transition-colors duration-300 group-hover:border-black/20">
+                            <div className="relative z-10 border-2 border-dashed border-black/10 rounded-[2.5rem] p-10 bg-black/5 flex flex-col items-center w-full max-w-sm transition-colors duration-300 group-hover:border-black/20">
                                 <motion.div
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
@@ -285,7 +285,12 @@ export function UploadZone() {
 
                             <button
                                 onClick={handleUpload}
-                                className="w-full bg-black text-white py-6 rounded-[2rem] font-black text-sm uppercase tracking-[0.3em] shadow-2xl hover:bg-secure hover:shadow-secure/20 transition-all active:scale-[0.98] group relative overflow-hidden"
+                                className={cn(
+                                    "w-full py-6 rounded-[2rem] font-black text-sm uppercase tracking-[0.3em] shadow-2xl transition-all active:scale-[0.98] group relative overflow-hidden",
+                                    session
+                                        ? "bg-black text-white hover:bg-secure hover:shadow-secure/20"
+                                        : "bg-secure text-white hover:bg-share hover:shadow-share/20"
+                                )}
                             >
                                 <span className="relative z-10 flex items-center justify-center gap-3">
                                     {session ? "Start Secure Transfer" : "Sign In to Transfer"}

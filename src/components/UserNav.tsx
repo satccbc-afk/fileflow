@@ -51,7 +51,7 @@ export function UserNav({ session: propSession }: { session: any }) {
     }
 
     return (
-        <Link href="/api/auth/signin" className="text-[10px] font-black uppercase tracking-[0.4em] text-share/40 hover:text-share transition-colors flex items-center gap-2">
+        <Link href="/api/auth/signin" className="bg-white text-black px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all flex items-center gap-2 border border-black/5">
             <User className="w-3 h-3" />
             Sign In
         </Link>
