@@ -14,6 +14,7 @@ export function AdminTerminal({ className }: AdminTerminalProps) {
     const [transfers, setTransfers] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isDeleting, setIsDeleting] = useState<string | null>(null);
+    const [isBulkDeleting, setIsBulkDeleting] = useState(false);
     const [selectedUser, setSelectedUser] = useState<any>(null);
 
     // Search & Filter State
@@ -82,6 +83,30 @@ export function AdminTerminal({ className }: AdminTerminalProps) {
             alert("Deletion failed");
         } finally {
             setIsDeleting(null);
+        }
+    };
+
+    const handleNukeAll = async () => {
+        const confirmNuke = confirm("CRITICAL WARNING: This will permanently delete EVERY SINGLE file, transmission, and discussion on the platform. This action is absolute and irreversible. Purge everything?");
+        if (!confirmNuke) return;
+
+        const doubleConfirm = prompt("Type 'PURGE ALL' to confirm absolute deletion:");
+        if (doubleConfirm !== "PURGE ALL") return;
+
+        setIsBulkDeleting(true);
+        try {
+            const res = await fetch("/api/admin/transfers", {
+                method: "DELETE",
+            });
+            if (res.ok) {
+                setTransfers([]);
+                fetchData(); // Refresh stats
+                alert("The mesh has been purged.");
+            }
+        } catch (error) {
+            alert("Mass deletion failed");
+        } finally {
+            setIsBulkDeleting(false);
         }
     };
 
@@ -297,46 +322,63 @@ export function AdminTerminal({ className }: AdminTerminalProps) {
 
                     {/* FILES TAB */}
                     {activeTab === 'files' && (
-                        <div className="grid gap-4">
-                            {transfers.length === 0 ? (
-                                <div className="text-center py-20 text-black/30 font-bold">No data found.</div>
-                            ) : (
-                                transfers.map((t) => (
-                                    <div key={t.transferId} className="flex flex-col md:flex-row md:items-center justify-between p-6 bg-white border border-black/5 rounded-2xl hover:border-black/20 hover:shadow-lg transition-all group gap-6">
-                                        <div className="flex items-center gap-5">
-                                            <div className="w-12 h-12 bg-black/5 rounded-xl flex items-center justify-center text-black/40 group-hover:bg-secure group-hover:text-white transition-colors">
-                                                <ShieldCheck className="w-5 h-5" />
-                                            </div>
-                                            <div>
-                                                <h4 className="font-bold text-sm mb-1">{t.files[0]?.name} {t.files.length > 1 && `+${t.files.length - 1}`}</h4>
-                                                <div className="flex items-center gap-4 text-[10px] font-mono text-black/40">
-                                                    <span>{t.transferId}</span>
-                                                    <span className="w-1 h-1 bg-black/20 rounded-full" />
-                                                    <span>{calculateExpiry(t.expiresAt)}</span>
-                                                    <span className="w-1 h-1 bg-black/20 rounded-full" />
-                                                    <span>{t.ownerEmail || 'Guest'}</span>
+                        <div className="space-y-6">
+                            <div className="flex justify-between items-center bg-red-500/5 p-6 rounded-3xl border border-red-500/10">
+                                <div>
+                                    <h3 className="text-lg font-black tracking-tight text-red-600">Mesh Purge Control</h3>
+                                    <p className="text-xs font-bold text-red-500/50 uppercase tracking-widest">Permanent data elimination zone</p>
+                                </div>
+                                <button
+                                    onClick={handleNukeAll}
+                                    disabled={isBulkDeleting || transfers.length === 0}
+                                    className="px-8 py-4 bg-red-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl hover:bg-red-600 transition-all disabled:opacity-30 flex items-center gap-3"
+                                >
+                                    {isBulkDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                                    Nuke All Files
+                                </button>
+                            </div>
+
+                            <div className="grid gap-4">
+                                {transfers.length === 0 ? (
+                                    <div className="text-center py-20 text-black/30 font-bold">No data found.</div>
+                                ) : (
+                                    transfers.map((t) => (
+                                        <div key={t.transferId} className="flex flex-col md:flex-row md:items-center justify-between p-6 bg-white border border-black/5 rounded-2xl hover:border-black/20 hover:shadow-lg transition-all group gap-6">
+                                            <div className="flex items-center gap-5">
+                                                <div className="w-12 h-12 bg-black/5 rounded-xl flex items-center justify-center text-black/40 group-hover:bg-secure group-hover:text-white transition-colors">
+                                                    <ShieldCheck className="w-5 h-5" />
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-bold text-sm mb-1">{t.files[0]?.name} {t.files.length > 1 && `+${t.files.length - 1}`}</h4>
+                                                    <div className="flex items-center gap-4 text-[10px] font-mono text-black/40">
+                                                        <span>{t.transferId}</span>
+                                                        <span className="w-1 h-1 bg-black/20 rounded-full" />
+                                                        <span>{calculateExpiry(t.expiresAt)}</span>
+                                                        <span className="w-1 h-1 bg-black/20 rounded-full" />
+                                                        <span>{t.ownerEmail || 'Guest'}</span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div className="flex items-center gap-6 justify-between md:justify-end border-t md:border-t-0 border-black/5 pt-4 md:pt-0">
-                                            <div className="text-right">
-                                                <div className="text-[10px] font-black uppercase tracking-widest text-black/30 mb-1">Downloads</div>
-                                                <div className="font-bold text-sm">{t.downloadCount || 0}</div>
+                                            <div className="flex items-center gap-6 justify-between md:justify-end border-t md:border-t-0 border-black/5 pt-4 md:pt-0">
+                                                <div className="text-right">
+                                                    <div className="text-[10px] font-black uppercase tracking-widest text-black/30 mb-1">Downloads</div>
+                                                    <div className="font-bold text-sm">{t.downloadCount || 0}</div>
+                                                </div>
+                                                <div className="h-8 w-px bg-black/10 hidden md:block" />
+                                                <button
+                                                    onClick={() => handleNuke(t.transferId)}
+                                                    disabled={isDeleting === t.transferId}
+                                                    className="w-10 h-10 flex items-center justify-center rounded-xl text-red-500 hover:bg-red-50 hover:scale-110 active:scale-95 transition-all disabled:opacity-50"
+                                                    title="Nuke Transfer"
+                                                >
+                                                    {isDeleting === t.transferId ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                                                </button>
                                             </div>
-                                            <div className="h-8 w-px bg-black/10 hidden md:block" />
-                                            <button
-                                                onClick={() => handleNuke(t.transferId)}
-                                                disabled={isDeleting === t.transferId}
-                                                className="w-10 h-10 flex items-center justify-center rounded-xl text-red-500 hover:bg-red-50 hover:scale-110 active:scale-95 transition-all disabled:opacity-50"
-                                                title="Nuke Transfer"
-                                            >
-                                                {isDeleting === t.transferId ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
-                                            </button>
                                         </div>
-                                    </div>
-                                ))
-                            )}
+                                    ))
+                                )}
+                            </div>
                         </div>
                     )}
                 </div>

@@ -29,3 +29,33 @@ export async function GET() {
         return NextResponse.json({ success: false, error: "Failed to fetch transfers" }, { status: 500 });
     }
 }
+
+export async function DELETE() {
+    try {
+        const session = await auth();
+        const isAdmin = session?.user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL || session?.user?.email === "khushboom099@gmail.com";
+
+        if (!isAdmin) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
+        await dbConnect();
+
+        // Nuke everything
+        await Transfer.deleteMany({});
+
+        // Also nuke comments associated with any transfers
+        try {
+            const { Comment } = await import("@/models/Comment");
+            await Comment.deleteMany({});
+        } catch (e) {
+            console.log("No Comment model found or failed to delete comments");
+        }
+
+        return NextResponse.json({ success: true, message: "All files and data purged from existence." });
+    } catch (error) {
+        console.error("Bulk Delete Error:", error);
+        return NextResponse.json({ success: false, error: "Failed to purge mesh" }, { status: 500 });
+    }
+}
+
