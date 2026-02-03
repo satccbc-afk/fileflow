@@ -136,7 +136,7 @@ export function UpgradeButton() {
                                     <Sparkles className="w-10 h-10 text-white" />
                                 </div>
                                 <h2 className="text-3xl font-black tracking-tight mb-2">Upgrade to Pro</h2>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-black/30 mb-10">Choose your preferred gateway</p>
+                                <p className="text-[10px] font-black uppercase tracking-widest text-black/30 mb-10">Secure Payment via Razorpay</p>
 
                                 <div className="space-y-4 text-left mb-10">
                                     {[
@@ -154,28 +154,20 @@ export function UpgradeButton() {
 
                                 <div className="grid gap-4">
                                     <button
-                                        onClick={handleStripeUpgrade}
-                                        disabled={!!loading}
-                                        className="w-full group relative py-6 bg-black text-white rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-indigo-600 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
-                                    >
-                                        {loading === 'stripe' ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
-                                        Pay with Stripe (USD)
-                                    </button>
-
-                                    <button
                                         onClick={handleRazorpayUpgrade}
                                         disabled={!!loading}
                                         className="w-full group relative py-6 bg-secure text-white rounded-2xl font-black uppercase text-[10px] tracking-widest hover:brightness-110 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                                     >
                                         {loading === 'razorpay' ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
-                                        Pay with Razorpay (INR)
+                                        Upgrade Now (INR)
                                     </button>
                                 </div>
 
-                                <p className="mt-8 text-[9px] font-bold text-black/20 uppercase tracking-widest">Secure Checkout • Instant Access</p>
+                                <p className="mt-8 text-[9px] font-bold text-black/20 uppercase tracking-widest">Instant Activation • Secure Checkout</p>
                             </div>
                         </motion.div>
                     </div>
+
                 )}
             </AnimatePresence>
         </>
