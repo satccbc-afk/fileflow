@@ -4,7 +4,7 @@ import { stripe } from "@/lib/stripe";
 import { User } from "@/models/User";
 import dbConnect from "@/lib/mongodb";
 
-export async function POST() {
+export async function POST(req: Request) {
     try {
         const session = await auth();
         if (!session?.user?.email) {
@@ -26,9 +26,12 @@ export async function POST() {
             });
         }
 
+        // Get the base URL dynamically or from env
+        const origin = req.headers.get("origin") || process.env.NEXTAUTH_URL || "http://localhost:3000";
+
         const stripeSession = await stripe.checkout.sessions.create({
-            success_url: `${process.env.AUTH_URL}/dashboard?success=true`,
-            cancel_url: `${process.env.AUTH_URL}/dashboard?canceled=true`,
+            success_url: `${origin}/dashboard?success=true`,
+            cancel_url: `${origin}/dashboard?canceled=true`,
             payment_method_types: ["card"],
             mode: "subscription",
             billing_address_collection: "auto",
@@ -55,8 +58,12 @@ export async function POST() {
         });
 
         return NextResponse.json({ url: stripeSession.url });
-    } catch (error) {
+    } catch (error: any) {
         console.error("[STRIPE_CHECKOUT]", error);
-        return new NextResponse("Internal Error", { status: 500 });
+        return NextResponse.json(
+            { error: error.message || "Internal Server Error" },
+            { status: 500 }
+        );
     }
 }
+

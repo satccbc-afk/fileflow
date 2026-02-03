@@ -53,6 +53,13 @@ const UserSchema = new mongoose.Schema({
     subscriptionStatus: {
         type: String,
     },
+    razorpayOrderId: {
+        type: String,
+    },
+    razorpayPaymentId: {
+        type: String,
+    },
+
 });
 
 export const User = mongoose.models.User || mongoose.model("User", UserSchema);

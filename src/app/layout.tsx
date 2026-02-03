@@ -96,7 +96,9 @@ export default async function RootLayout({
           {children}
           <Footer />
           <GlobalMouse />
+          <script src="https://checkout.razorpay.com/v1/checkout.js" async />
         </Providers>
+
       </body>
     </html>
   );
