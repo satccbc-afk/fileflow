@@ -31,7 +31,7 @@ export async function POST(req: Request) {
             amount: Math.round(amount * 100),
             currency,
             receipt: `receipt_${Date.now()}`,
-            metadata: {
+            notes: {
                 userId: user._id.toString(),
             },
         };
