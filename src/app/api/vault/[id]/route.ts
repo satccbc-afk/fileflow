@@ -109,3 +109,29 @@ export async function DELETE(
         return NextResponse.json({ success: false, error: "Failed to delete transfer" }, { status: 500 });
     }
 }
+
+export async function PATCH(
+    req: Request,
+    { params }: { params: Promise<{ id: string }> }
+) {
+    try {
+        await dbConnect();
+        const { id } = await params;
+        const { workspaceNotes, isWorkspace } = await req.json();
+
+        const transfer = await Transfer.findOneAndUpdate(
+            { transferId: id },
+            { $set: { workspaceNotes, isWorkspace } },
+            { new: true }
+        );
+
+        if (!transfer) {
+            return NextResponse.json({ success: false, error: "Transfer not found" }, { status: 404 });
+        }
+
+        return NextResponse.json({ success: true, transfer });
+    } catch (error) {
+        return NextResponse.json({ success: false, error: "Failed to update workspace" }, { status: 500 });
+    }
+}
+

@@ -18,6 +18,9 @@ const TransferSchema = new Schema({
     ownerEmail: { type: String }, // Link to User
     downloadCount: { type: Number, default: 0 },
     maxDownloads: { type: Number },
+    workspaceNotes: { type: String, default: "" },
+    sharedUsers: [{ type: String }],
+    isWorkspace: { type: Boolean, default: false },
 });
 
 export const Transfer = models.Transfer || model("Transfer", TransferSchema);
