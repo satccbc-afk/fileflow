@@ -21,6 +21,8 @@ export function UploadZone() {
     const [shareLink, setShareLink] = useState("");
     const [scanLines, setScanLines] = useState<string[]>([]);
     const [errorMessage, setErrorMessage] = useState("");
+    const [copied, setCopied] = useState(false);
+
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         setFiles(prev => [...prev, ...acceptedFiles]);
@@ -119,7 +121,10 @@ export function UploadZone() {
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(shareLink);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
     };
+
 
     return (
         <div className="w-full max-w-2xl mx-auto">
@@ -413,11 +418,19 @@ export function UploadZone() {
                                 </div>
                                 <button
                                     onClick={copyToClipboard}
-                                    className="w-full bg-black text-white py-6 rounded-2xl font-black text-xs uppercase tracking-[0.4em] shadow-xl hover:bg-secure transition-all flex items-center justify-center gap-3 group/btn"
+                                    className={cn(
+                                        "w-full py-6 rounded-2xl font-black text-xs uppercase tracking-[0.4em] shadow-xl transition-all flex items-center justify-center gap-3 group/btn",
+                                        copied ? "bg-secure text-white" : "bg-black text-white hover:bg-secure"
+                                    )}
                                 >
-                                    <Copy className="w-4 h-4 group-hover/btn:rotate-12 transition-transform" />
-                                    Copy Link
+                                    {copied ? (
+                                        <CheckCircle2 className="w-4 h-4" />
+                                    ) : (
+                                        <Copy className="w-4 h-4 group-hover/btn:rotate-12 transition-transform" />
+                                    )}
+                                    {copied ? "Link Copied!" : "Copy Link"}
                                 </button>
+
                             </div>
                             <button onClick={reset} className="w-full flex items-center justify-center gap-3 text-[11px] font-black uppercase tracking-[0.5em] text-black/30 hover:text-black transition-colors">
                                 <RefreshCw className="w-4 h-4" />

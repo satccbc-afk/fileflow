@@ -8,6 +8,8 @@ import { DeleteTransferButton } from "@/components/DeleteTransferButton";
 export function TransferList({ initialTransfers }: { initialTransfers: any[] }) {
     const [transfers, setTransfers] = useState(initialTransfers);
     const [search, setSearch] = useState("");
+    const [copiedId, setCopiedId] = useState<string | null>(null);
+
 
     const filteredTransfers = transfers.filter(t =>
         t.files[0]?.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -55,12 +57,14 @@ export function TransferList({ initialTransfers }: { initialTransfers: any[] }) 
                                 <button
                                     onClick={() => {
                                         navigator.clipboard.writeText(`${window.location.origin}/vault/${t.transferId}`);
-                                        alert("Link copied!");
+                                        setCopiedId(t.transferId);
+                                        setTimeout(() => setCopiedId(null), 2000);
                                     }}
-                                    className="text-[10px] font-black uppercase tracking-widest text-black/40 hover:text-black transition-colors"
+                                    className={`text-[10px] font-black uppercase tracking-widest transition-all ${copiedId === t.transferId ? 'text-secure scale-110' : 'text-black/40 hover:text-black'}`}
                                 >
-                                    Copy Link
+                                    {copiedId === t.transferId ? "Link Copied!" : "Copy Link"}
                                 </button>
+
                             </div>
                             <div className="flex flex-col items-end mr-4">
                                 <span className="text-[9px] font-black uppercase tracking-widest text-black/20 mb-1">Vault Key</span>
